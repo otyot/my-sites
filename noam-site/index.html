@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noam Shamir</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Heebo', sans-serif;
+  background: #181818;
+  direction: rtl;
+  overflow-x: hidden;
+}
+
+/* HERO */
+
+.hero {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("bg-hero.png");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.debug-strip {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: #eaff35;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.hero-content {
+  position: absolute;
+  left: 46%;
+  transform: translateX(-50%);
+  bottom: 155px;
+  width: 300px;
+  text-align: right;
+  color: #f4efe4;
+}
+
+.hero-title {
+  font-size: 38px;
+  line-height: 1.08;
+  font-weight: 900;
+  margin-bottom: 24px;
+}
+
+.hero-subtitle {
+  font-size: 17px;
+  line-height: 1.45;
+  margin-bottom: 24px;
+}
+
+.hero-subtitle strong {
+  font-weight: 800;
+}
+
+.hero-button {
+  display: inline-block;
+  background: #ff3b4f;
+  color: white;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.hero-note {
+  margin-top: 9px;
+  font-size: 10px;
+  opacity: 0.85;
+  text-align: right;
+  color: #f4efe4;
+}
+
+/* FORMS */
+
+.section-2,
+.section-5 {
+  background-image: url("bg-section-2.png");
+  background-size: cover;
+  background-position: center;
+  padding: 60px 0;
+}
+
+.form-container {
+  width: 70%;
+  max-width: 420px;
+  margin: 0 auto;
+  color: #f4efe4;
+  text-align: right;
+}
+
+.form-title {
+  font-size: 22px;
+  line-height: 1.35;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.form-subtitle {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 30px;
+}
+
+.question {
+  margin-bottom: 28px;
+}
+
+.question-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.option {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+}
+
+.option input[type="radio"] {
+  display: none;
+}
+
+.option::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.option:has(input[type="radio"]:checked)::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ff3b4f;
+  border-radius: 50%;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+input,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: none;
+  font-family: 'Heebo', sans-serif;
+  font-size: 16px;
+  direction: rtl;
+  text-align: right;
+}
+
+textarea {
+  min-height: 85px;
+}
+
+.submit-btn {
+  margin-top: 20px;
+  width: 100%;
+  background: #ff3b4f;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.after-button-text {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.7;
+  text-align: center;
+}
+
+/* SECTION 3 */
+
+.section-3 {
+  background-image: url("bg-section-3.png");
+  background-size: cover;
+  background-position: center;
+  padding: 60px 0;
+}
+
+.product-card {
+  width: 82%;
+  max-width: 380px;
+  margin: 0 auto 32px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 18px;
+  padding: 16px;
+  color: #f4efe4;
+  box-sizing: border-box;
+}
+
+.product-inner {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.product-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-text {
+  flex: 1;
+  text-align: right;
+}
+
+.product-title {
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+
+.product-subtitle {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.product-body {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+
+.price-note {
+  font-size: 11px;
+  opacity: 0.75;
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+.price-line {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.price-line.tight {
+  margin-bottom: 2px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #514f4f;
+  font-weight: 900;
+  margin-left: 6px;
+}
+
+.new-price {
+  font-weight: 900;
+}
+
+.price-caption {
+  font-size: 11px;
+  opacity: 0.75;
+  margin-bottom: 10px;
+}
+
+.product-btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: #f1f1f1;
+  color: #000;
+  text-align: center;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 13px;
+  text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+  <div class="debug-strip">made with ChatGPT</div>
+
+  <div class="hero-content">
+    <div class="hero-title">
+      הילד שלך<br>
+      ממתין לרשות<br>
+      להצליח.
+    </div>
+
+    <div class="hero-subtitle">
+      אני לא מלמד קריאה<br>
+      <strong>אני מלמד ילדים שהם יכולים.</strong>
+    </div>
+
+    <a class="hero-button" href="https://wa.me/359877447040" target="_blank">
+      למידע נוסף והרשמה לדמו
+    </a>
+
+    <div class="hero-note">
+      לחיצה על הכפתור תפתח צ׳ט וואצאפ איתי
+    </div>
+  </div>
+</section>
+
+<section class="section-2">
+  <form class="form-container" action="https://formspree.io/f/xkoyopoe" method="POST">
+
+    <input type="hidden" name="_subject" value="פנייה חדשה מהשאלון">
+    <input type="hidden" name="form_source" value="section_2_questionnaire">
+
+    <div class="form-title">
+      השאלות שכל הורה צריך<br>
+      לשאול את עצמו<span dir="ltr">.</span>
+    </div>
+
+    <div class="form-subtitle">
+      מכל ההורים - רק אחוז אחד מעז.
+    </div>
+
+    <div class="question">
+      <div class="question-title">מה האתגר הכי גדול עכשיו?</div>
+      <label class="option"><input type="radio" name="challenge" value="הילד מתקשה בקריאה ומתסכל בקלות"> הילד מתקשה בקריאה ומתסכל בקלות</label>
+      <label class="option"><input type="radio" name="challenge" value="אמרו לי שיש לו בעיית קשב או התנהגות"> אמרו לי שיש לו בעיית קשב או התנהגות</label>
+      <label class="option"><input type="radio" name="challenge" value="הוא פשוט לא רוצה ללמוד – כלום"> הוא פשוט לא רוצה ללמוד – כלום</label>
+    </div>
+
+    <div class="question">
+      <div class="question-title">כמה זמן זה קורה?</div>
+      <label class="option"><input type="radio" name="time" value="כמה חודשים"> כמה חודשים</label>
+      <label class="option"><input type="radio" name="time" value="שנה בערך"> שנה בערך</label>
+      <label class="option"><input type="radio" name="time" value="יותר משנה – וכבר ניסינו הכל"> יותר משנה – וכבר ניסינו הכל</label>
+    </div>
+
+    <div class="question">
+      <div class="question-title">ניסיתם עד עכשיו:</div>
+      <label class="option"><input type="radio" name="tried" value="שיעורים פרטיים"> שיעורים פרטיים</label>
+      <label class="option"><input type="radio" name="tried" value="אבחונים וטיפולים"> אבחונים וטיפולים</label>
+      <label class="option"><input type="radio" name="tried" value="הכל – וכלום לא באמת עזר"> הכל – וכלום לא באמת עזר</label>
+    </div>
+
+    <input type="text" name="name" placeholder="שם מלא" required>
+    <input type="text" name="child" placeholder="שם הילד וגיל" required>
+    <input type="tel" name="phone" placeholder="טלפון להתקשרות בוואצאפ" required>
+
+    <textarea name="message" placeholder="מה חשוב לי שתדע/י?"></textarea>
+
+    <button class="submit-btn" type="submit">
+      תן לי כיוון
+    </button>
+
+    <div class="after-button-text">
+      אחזור אליך אישית בוואצאפ תוך זמן קצר
+    </div>
+
+  </form>
+</section>
+
+<section class="section-3">
+
+  <div class="product-card">
+    <div class="product-inner">
+
+      <div class="product-image">
+        <img src="dummy-01.png" alt="">
+      </div>
+
+      <div class="product-text">
+        <div class="product-title">
+          לימוד קריאה בשיטת צוריאל יהב
+        </div>
+
+        <div class="product-subtitle">
+          כשמשנים את הדרך הסיפור משתנה.
+        </div>
+
+        <div class="product-body">
+          קורס לימוד קריאה בעברית הטוב בעולם היום.<br>
+          השיטה נבדקה במשך 10 שנים והוכחה כיעילה ומהנה.
+        </div>
+
+        <div class="price-line">
+          <span class="old-price">300</span>
+          <span class="new-price">199 ₪ לשבוע למידה</span>
+        </div>
+      </div>
+
+    </div>
+
+    <a href="#product-lead-form" class="product-btn" onclick="selectOffer('לימוד קריאה')">
+      הרשמה לדמו • מפגש היכרות והתאמה בחינם
+    </a>
+  </div>
+
+  <div class="product-card">
+    <div class="product-inner">
+
+      <div class="product-image">
+        <img src="dummy-01.png" alt="">
+      </div>
+
+      <div class="product-text">
+        <div class="product-title">
+          אימון ליווי הורים 1:1 זום/טלפון
+        </div>
+
+        <div class="product-subtitle">
+          שיחת היכרות 25 דקות בחינם<br>
+          בלי התחייבות. בלי מכירות. רק שיחה.
+        </div>
+
+        <div class="product-body">
+          שיחה אחת — פחות דאגה,<br>
+          יותר בהירות, וכיוון ברור קדימה.
+        </div>
+
+        <div class="price-note">
+          רוצים להמשיך? חבילה מלאה:
+        </div>
+
+        <div class="price-line tight">
+          <span class="old-price">1900</span>
+          <span class="new-price">1350 ₪</span>
+        </div>
+
+        <div class="price-caption">
+          3 מפגשים x 45 דקות / אחד על אחד
+        </div>
+      </div>
+
+    </div>
+
+    <a href="#product-lead-form" class="product-btn" onclick="selectOffer('אימון 1:1')">
+      לתיאום שיחת אימון ללא התחייבות
+    </a>
+  </div>
+
+  <div class="product-card">
+    <div class="product-inner">
+
+      <div class="product-image">
+        <img src="dummy-01.png" alt="">
+      </div>
+
+      <div class="product-text">
+        <div class="product-title">
+          ליווי הורים אישי בוואצאפ
+        </div>
+
+        <div class="product-subtitle">
+          גישה ישירה אליי. בלי פגישות. בלי לחכות.
+        </div>
+
+        <div class="product-body">
+          הילד לא מקשיב?<br>
+          מריבה בבית?<br>
+          משהו קטן שמוציא אותך מדעתך?<br><br>
+          שולחים הודעה — מקבלים כיוון.<br>
+          כלים מעולמות NLP, CBT וקואצ׳ינג,<br>
+          בדיוק לרגעים האמיתיים.
+        </div>
+
+        <div class="price-line">
+          <span class="old-price">297</span>
+          <span class="new-price">69 ₪ לחודש</span>
+        </div>
+      </div>
+
+    </div>
+
+    <a href="#product-lead-form" class="product-btn" onclick="selectOffer('ליווי בוואצאפ')">
+      להצטרפות לליווי בוואצאפ
+    </a>
+  </div>
+
+</section>
+
+<section class="section-5" id="product-lead-form">
+  <form class="form-container" action="https://formspree.io/f/xkoyopoe" method="POST">
+
+    <input type="hidden" name="_subject" value="פנייה חדשה מאחד המוצרים">
+    <input type="hidden" name="form_source" value="bottom_product_form">
+    <input type="hidden" name="offer" id="selected-offer">
+
+    <div class="form-title">
+      השאירו פרטים<br>
+      ואחזור אליכם בוואצאפ<span dir="ltr">.</span>
+    </div>
+
+    <div class="question">
+      <div class="question-title">במה אתם מתעניינים?</div>
+
+      <label class="option">
+        <input type="radio" name="offer_choice" value="לימוד קריאה" required>
+        לימוד קריאה
+      </label>
+
+      <label class="option">
+        <input type="radio" name="offer_choice" value="אימון 1:1">
+        אימון 1:1
+      </label>
+
+      <label class="option">
+        <input type="radio" name="offer_choice" value="ליווי בוואצאפ">
+        ליווי בוואצאפ
+      </label>
+    </div>
+
+    <input type="text" name="name" placeholder="שם מלא" required>
+    <input type="text" name="child" placeholder="שם הילד וגיל" required>
+    <input type="tel" name="phone" placeholder="טלפון להתקשרות בוואצאפ" required>
+
+    <textarea name="message" placeholder="מה חשוב לי שתדע/י?"></textarea>
+
+    <button class="submit-btn" type="submit">
+      שלחו פרטים
+    </button>
+
+    <div class="after-button-text">
+      אחזור אליך אישית בוואצאפ תוך זמן קצר
+    </div>
+
+  </form>
+</section>
+
+<script>
+function selectOffer(offer) {
+  const field = document.getElementById("selected-offer");
+  if (field) {
+    field.value = offer;
+  }
+
+  const radios = document.querySelectorAll('input[name="offer_choice"]');
+  radios.forEach(function(radio) {
+    radio.checked = (radio.value === offer);
+  });
+}
+</script>
+
+</body>
+</html>
