@@ -26,7 +26,6 @@ html,body{
     position:relative;
 }
 
-/* VERSION TEXT */
 .version-label{
     position:absolute;
     top:8px;
@@ -50,7 +49,6 @@ html,body{
     display:block;
 }
 
-/* TEXT BLOCK */
 .hero-content{
     position:absolute;
     left:calc(50% - 25px);
@@ -125,7 +123,6 @@ html,body{
     margin-top:3px;
 }
 
-/* MOBILE SAFETY FIX */
 @media (max-width:430px){
 
     .hero-content{
@@ -172,13 +169,8 @@ html,body{
         font-size:0.5rem;
         line-height:1.35;
     }
-
-    .hero-note .note-second-line{
-        margin-top:3px;
-    }
 }
 
-/* EXTRA SMALL PHONES */
 @media (max-width:380px){
 
     .hero-content{
@@ -220,7 +212,7 @@ html,body{
 }
 
 .form-container{
-    width:70%;
+    width:82%;
     max-width:420px;
     margin:0 auto;
     color:#f4efe4;
@@ -232,6 +224,12 @@ html,body{
     line-height:1.35;
     font-weight:900;
     margin-bottom:10px;
+    text-align:right;
+}
+
+.form-title-line{
+    display:block;
+    white-space:nowrap;
 }
 
 .form-subtitle{
@@ -326,6 +324,22 @@ textarea{
     text-align:center;
 }
 
+@media (max-width:430px){
+
+    .form-container{
+        width:86%;
+    }
+
+    .form-title{
+        font-size:21px;
+    }
+
+    .option{
+        font-size:15px;
+        line-height:1.45;
+    }
+}
+
 </style>
 </head>
 
@@ -334,7 +348,7 @@ textarea{
 <div class="page">
 
 <div class="version-label">
-VERSION 12:20
+VERSION 12:34
 </div>
 
 <section class="hero">
@@ -378,14 +392,14 @@ VERSION 12:20
 
 <section class="section-2">
 
-<form class="form-container" action="https://formspree.io/f/xkoyopoe" method="POST">
+<form class="form-container" action="https://formspree.io/f/xkoyopoe" method="POST" onsubmit="return validateIsraeliPhone()">
 
 <input type="hidden" name="_subject" value="פנייה חדשה מהשאלון">
 <input type="hidden" name="form_source" value="section_2_questionnaire">
 
 <div class="form-title">
-השאלות שכל הורה צריך<br>
-לשאול את עצמו<span dir="ltr">.</span>
+<span class="form-title-line">השאלות שכל הורה צריך</span>
+<span class="form-title-line">לשאול את עצמו<span dir="ltr">.</span></span>
 </div>
 
 <div class="form-subtitle">
@@ -451,8 +465,8 @@ VERSION 12:20
 
 <input type="text" name="name" placeholder="שם מלא" required>
 <input type="text" name="child" placeholder="שם הילד וגיל" required>
-<input type="tel" name="phone" placeholder="טלפון להתקשרות בוואצאפ" required>
-<textarea name="message" placeholder="מה חשוב לי שתדע/י?" required></textarea>
+<input type="tel" id="phone" name="phone" placeholder="טלפון להתקשרות בוואצאפ" required>
+<textarea name="message" placeholder="מה חשוב לי שתדע/י?"></textarea>
 
 <button class="submit-btn" type="submit">
 תן לי כיוון
@@ -467,6 +481,22 @@ VERSION 12:20
 </section>
 
 </div>
+
+<script>
+function validateIsraeliPhone(){
+    const phoneField = document.getElementById("phone");
+    const digitsOnly = phoneField.value.replace(/\D/g, "");
+
+    if(!/^05\d{8}$/.test(digitsOnly)){
+        alert("נא להזין מספר טלפון נייד ישראלי תקין. לדוגמה: 0501234567");
+        phoneField.focus();
+        return false;
+    }
+
+    phoneField.value = digitsOnly;
+    return true;
+}
+</script>
 
 </body>
 </html>
