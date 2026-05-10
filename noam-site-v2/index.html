@@ -2,119 +2,172 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Noam Shamir</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Heebo', sans-serif;
-  background: #181818;
-  direction: rtl;
-  overflow-x: hidden;
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    background: #111;
+    font-family: 'Heebo', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    direction: rtl;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Heebo', Arial, sans-serif;
+}
+
+.page {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    background: #111;
 }
 
 .hero {
-  width: 100%;
-  min-height: 100vh;
-  background-image: url("images/bg-section-01.png");
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  position: relative;
+    position: relative;
+    width: 100%;
+    min-height: 100svh;
+    background-image: url("images/bg-section-01.png");
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
 }
 
 .hero-content {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 120px;
-  width: 82%;
-  max-width: 420px;
-  text-align: right;
-  color: #f4efe4;
+    position: absolute;
+    width: 78%;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 48%;
+
+    text-align: right;
+    color: #F4EFE6;
 }
 
 .hero-title {
-  font-size: 54px;
-  line-height: 1;
-  font-weight: 900;
-  margin-bottom: 20px;
+    margin: 0 0 18px 0;
+    font-size: 3.4rem;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.03em;
 }
 
-.hero-small-line {
-  font-size: 18px;
-  line-height: 1.4;
-  font-weight: 700;
-  color: #d9ff3f;
-  margin-bottom: 28px;
+.hero-sub {
+    margin: 0 0 34px 0;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    font-weight: 800;
+    color: #D9FF39;
 }
 
 .hero-body {
-  font-size: 20px;
-  line-height: 1.6;
-  margin-bottom: 34px;
+    margin: 0 0 34px 0;
+    font-size: 1.22rem;
+    line-height: 1.85;
+    font-weight: 600;
+}
+
+.hero-button-wrap {
+    text-align: center;
 }
 
 .hero-button {
-  display: inline-block;
-  background: #ff3b4f;
-  color: white;
-  border-radius: 14px;
-  padding: 16px 26px;
-  font-size: 20px;
-  font-weight: 800;
-  text-decoration: none;
+    display: inline-block;
+    padding: 14px 36px;
+    border: 2px solid #2CFF43;
+    border-radius: 16px;
+    color: #2CFF43;
+    text-decoration: none;
+    font-size: 1.55rem;
+    font-weight: 800;
 }
 
 .hero-note {
-  margin-top: 14px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #f4efe4;
-  opacity: 0.9;
+    margin-top: 16px;
+    text-align: center;
+    color: #F4EFE6;
+    font-size: 0.82rem;
+    line-height: 1.65;
 }
+
+.hero-note .bold {
+    font-weight: 800;
+}
+
+@media (max-width: 430px) {
+
+    .hero-content {
+        width: 82%;
+        top: 49%;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .hero-body {
+        font-size: 1.1rem;
+    }
+
+    .hero-button {
+        font-size: 1.35rem;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
+<div class="page">
+
 <section class="hero">
 
-  <div class="hero-content">
+<div class="hero-content">
 
-    <div class="hero-title">
-      רשות להצליח
-    </div>
+<h1 class="hero-title">רשות להצליח.</h1>
 
-    <div class="hero-small-line">
-      מודל אימון הורי חדש בוואטסאפ<br>
-      חשיבה משותפת, ומענה בזמן אמת.
-    </div>
+<div class="hero-sub">
+מודל אימון הורי חדש בוואטסאפ<br>
+חשיבה משותפת ומענה בזמן אמת.
+</div>
 
-    <div class="hero-body">
-      אל תתפשרו על איך שהבית שלכם נראה היום.<br>
-      אם אתם עסוקים רוב הזמן בכיבוי שריפות,<br>
-      זה לא כי חסרים לכם טיפים.<br><br>
+<div class="hero-body">
+אל תתפשרו על איך שהבית שלכם נראה היום.<br>
+אם אתם עסוקים רוב הזמן בכיבוי שריפות,<br>
+זה לא כי חסרים לכם טיפים.<br><br>
 
-      יש דרך אחרת לפעול. מדויקת יותר, מודעת יותר,<br>
-      שמחזירה לכם את השליטה על מה שקורה בבית.
-    </div>
+יש דרך אחרת לפעול. מדויקת יותר, מודעת יותר,<br>
+שמחזירה לכם את השליטה על מה שקורה בבית.
+</div>
 
-    <a class="hero-button" href="https://wa.me/359877447040" target="_blank">
-      התחילו שבוע ניסיון
-    </a>
+<div class="hero-button-wrap">
+<a class="hero-button" href="https://wa.me/359877447040">
+התחילו שבוע ניסיון
+</a>
 
-    <div class="hero-note">
-      חינם למשך שבוע ואחרי זה 89 ₪ לחודש<br>
-      לחיצה על הכפתור תפתח חלון צ׳ט וואטסאפ איתי
-    </div>
+<div class="hero-note">
+<span class="bold">חינם למשך שבוע ואחרי זה 89 ₪ לחודש</span><br>
+לחיצה על הכפתור תפתח חלון צ׳ט וואטסאפ איתי
+</div>
+</div>
 
-  </div>
+</div>
 
 </section>
+
+</div>
 
 </body>
 </html>
