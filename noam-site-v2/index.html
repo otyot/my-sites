@@ -13,12 +13,11 @@
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  overflow-x: hidden;
   background: #111;
+  direction: rtl;
+  overflow-x: hidden;
   font-family: 'Heebo', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  direction: rtl;
 }
 
 * {
@@ -33,55 +32,33 @@ html, body {
   background: #111;
 }
 
-/* SECTION 1 — HERO */
+/* SECTION 1 */
 .hero {
   position: relative;
   width: 100%;
-  height: calc(100vw * 1.7777778);
-  max-height: 853px;
-  min-height: 690px;
-  background-image: url("images/bg-section-01.png?v=section1-04");
-  background-size: 100% 100%;
+  aspect-ratio: 1080 / 1920;
+  background-image: url("images/bg-section-01.png");
+  background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
   overflow: hidden;
 }
 
-/* top strips */
-.top-black-strip {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 54px;
-  background: #181818;
-  z-index: 2;
-}
-
-.top-neon-strip {
-  position: absolute;
-  top: 54px;
-  left: 0;
-  right: 0;
-  height: 12px;
-  background: #dcff31;
-  z-index: 2;
-}
-
+/* Text block positioned to match the faded Photoshop guide */
 .hero-content {
   position: absolute;
-  width: 78%;
   left: 50%;
+  top: 48.2%;
   transform: translateX(-50%);
-  top: 45.5%;
+  width: 74%;
+  color: #f4efe6;
   text-align: right;
-  color: #F4EFE6;
-  z-index: 3;
+  z-index: 2;
 }
 
 .hero-title {
-  margin: 0 0 16px 0;
-  font-size: 2.42rem;
+  margin: 0 0 18px 0;
+  font-size: 2.35rem;
   line-height: 1;
   font-weight: 900;
   letter-spacing: -0.03em;
@@ -89,15 +66,15 @@ html, body {
 
 .hero-sub {
   margin: 0 0 30px 0;
-  font-size: 1.02rem;
-  line-height: 1.45;
+  color: #d9ff39;
+  font-size: 0.96rem;
+  line-height: 1.48;
   font-weight: 800;
-  color: #D9FF39;
 }
 
 .hero-body {
-  margin: 0 0 28px 0;
-  font-size: 0.72rem;
+  margin: 0 0 30px 0;
+  font-size: 0.82rem;
   line-height: 1.9;
   font-weight: 500;
 }
@@ -108,91 +85,60 @@ html, body {
 
 .hero-button {
   display: inline-block;
-  padding: 10px 25px;
-  border: 2px solid #2CFF43;
-  border-radius: 14px;
-  color: #2CFF43;
+  min-width: 220px;
+  padding: 9px 22px 10px;
+  border: 2px solid #2cff43;
+  border-radius: 12px;
+  color: #2cff43;
+  background: transparent;
   text-decoration: none;
-  font-size: 1.08rem;
+  font-size: 1.03rem;
+  line-height: 1.2;
   font-weight: 800;
 }
 
 .hero-note {
-  margin-top: 12px;
+  margin-top: 14px;
   text-align: center;
-  color: #F4EFE6;
-  font-size: 0.66rem;
+  color: #f4efe6;
+  font-size: 0.58rem;
   line-height: 1.6;
+  font-weight: 500;
 }
 
 .hero-note .bold {
   font-weight: 800;
 }
 
-/* bottom stats bar */
-.stats-bar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 104px;
-  background: #1b1b1b;
-  border-top: 1px solid rgba(255,255,255,0.35);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 18px 12px 16px;
-  color: #f4efe6;
-  z-index: 4;
-}
-
-.stat-item {
-  text-align: center;
-  width: 25%;
-}
-
-.stat-number {
-  font-size: 1.65rem;
-  line-height: 1;
-  font-weight: 900;
-  margin-bottom: 8px;
-}
-
-.stat-label {
-  font-size: 0.6rem;
-  line-height: 1.25;
-  font-weight: 700;
-  opacity: 0.95;
-}
-
-@media (min-width: 481px) {
-  .hero {
-    height: 853px;
-  }
-}
-
 @media (max-width: 390px) {
   .hero-content {
-    top: 45%;
-    width: 80%;
+    width: 76%;
+    top: 48%;
   }
 
   .hero-title {
-    font-size: 2.32rem;
+    font-size: 2.25rem;
+    margin-bottom: 16px;
   }
 
   .hero-sub {
-    font-size: 0.96rem;
+    font-size: 0.9rem;
     margin-bottom: 26px;
   }
 
   .hero-body {
-    font-size: 0.69rem;
-    margin-bottom: 24px;
+    font-size: 0.77rem;
+    margin-bottom: 26px;
   }
 
   .hero-button {
-    font-size: 1rem;
+    min-width: 205px;
+    font-size: 0.96rem;
+    padding: 8px 18px 9px;
+  }
+
+  .hero-note {
+    font-size: 0.54rem;
   }
 }
 </style>
@@ -204,16 +150,13 @@ html, body {
 
 <section class="hero">
 
-  <div class="top-black-strip"></div>
-  <div class="top-neon-strip"></div>
-
   <div class="hero-content">
 
     <h1 class="hero-title">רשות להצליח.</h1>
 
     <div class="hero-sub">
       מודל אימון הורי חדש בוואטסאפ<br>
-      חשיבה משותפת ומענה בזמן אמת.
+      חשיבה משותפת, ומענה בזמן אמת.
     </div>
 
     <div class="hero-body">
@@ -236,28 +179,6 @@ html, body {
       </div>
     </div>
 
-  </div>
-
-  <div class="stats-bar">
-    <div class="stat-item">
-      <div class="stat-number">7K+</div>
-      <div class="stat-label">עוקבים<br>ברשתות</div>
-    </div>
-
-    <div class="stat-item">
-      <div class="stat-number">10+</div>
-      <div class="stat-label">שנות<br>פעילות</div>
-    </div>
-
-    <div class="stat-item">
-      <div class="stat-number">1,800+</div>
-      <div class="stat-label">ילדים<br>במערכת</div>
-    </div>
-
-    <div class="stat-item">
-      <div class="stat-number">321</div>
-      <div class="stat-label">ילדים<br>שלימדתי</div>
-    </div>
   </div>
 
 </section>
