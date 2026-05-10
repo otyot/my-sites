@@ -23,18 +23,20 @@ html,body{
     width:100%;
     max-width:480px;
     margin:0 auto;
+    position:relative;
 }
 
-/* VERSION BAR */
-.version-bar{
-    width:100%;
-    background:#ffe600;
-    color:#000;
-    text-align:center;
-    font-size:14px;
+/* VERSION TEXT ON EXISTING BLACK STRIP */
+.version-label{
+    position:absolute;
+    top:8px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:20;
+    color:#ffe600;
+    font-size:12px;
     font-weight:800;
-    padding:8px 0;
-    letter-spacing:0.03em;
+    letter-spacing:0.08em;
 }
 
 .hero{
@@ -48,14 +50,14 @@ html,body{
     display:block;
 }
 
-/* moved text block slightly LEFT */
+/* CENTERED CONTENT BLOCK */
 .hero-content{
     position:absolute;
-    left:43.5%;
+    left:50%;
     top:48.2%;
     transform:translateX(-50%);
     width:74%;
-    text-align:right;
+    text-align:center;
     color:#f4efe6;
 }
 
@@ -82,12 +84,9 @@ html,body{
     font-weight:500;
 }
 
-/* moved button block slightly RIGHT */
 .hero-button-wrap{
     width:100%;
     text-align:center;
-    position:relative;
-    left:6.5%;
 }
 
 .hero-button{
@@ -122,8 +121,8 @@ html,body{
 
 <div class="page">
 
-<div class="version-bar">
-VERSION 4
+<div class="version-label">
+VERSION 5
 </div>
 
 <section class="hero">
