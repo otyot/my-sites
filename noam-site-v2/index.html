@@ -10,112 +10,191 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    overflow-x: hidden;
-    background: #111;
-    font-family: 'Heebo', Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    direction: rtl;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background: #111;
+  font-family: 'Heebo', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  direction: rtl;
 }
 
 * {
-    box-sizing: border-box;
-    font-family: 'Heebo', Arial, sans-serif;
+  box-sizing: border-box;
+  font-family: 'Heebo', Arial, sans-serif;
 }
 
 .page {
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    background: #111;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: #111;
 }
 
+/* SECTION 1 — HERO */
 .hero {
-    position: relative;
-    width: 100%;
-    min-height: 100svh;
-    background-image: url("images/bg-section-01.png");
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
+  position: relative;
+  width: 100%;
+  height: calc(100vw * 1.7777778);
+  max-height: 853px;
+  min-height: 690px;
+  background-image: url("images/bg-section-01.png?v=section1-04");
+  background-size: 100% 100%;
+  background-position: center top;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+/* top strips */
+.top-black-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 54px;
+  background: #181818;
+  z-index: 2;
+}
+
+.top-neon-strip {
+  position: absolute;
+  top: 54px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: #dcff31;
+  z-index: 2;
 }
 
 .hero-content {
-    position: absolute;
-    width: 74%;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 48%;
-    text-align: right;
-    color: #F4EFE6;
+  position: absolute;
+  width: 78%;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 45.5%;
+  text-align: right;
+  color: #F4EFE6;
+  z-index: 3;
 }
 
 .hero-title {
-    margin: 0 0 18px 0;
-    font-size: 2.55rem;
-    line-height: 1;
-    font-weight: 900;
-    letter-spacing: -0.03em;
+  margin: 0 0 16px 0;
+  font-size: 2.42rem;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.03em;
 }
 
 .hero-sub {
-    margin: 0 0 34px 0;
-    font-size: 1.05rem;
-    line-height: 1.45;
-    font-weight: 800;
-    color: #D9FF39;
+  margin: 0 0 30px 0;
+  font-size: 1.02rem;
+  line-height: 1.45;
+  font-weight: 800;
+  color: #D9FF39;
 }
 
 .hero-body {
-    margin: 0 0 34px 0;
-    font-size: 1.05rem;
-    line-height: 1.8;
-    font-weight: 500;
+  margin: 0 0 28px 0;
+  font-size: 0.72rem;
+  line-height: 1.9;
+  font-weight: 500;
 }
 
 .hero-button-wrap {
-    text-align: center;
+  text-align: center;
 }
 
 .hero-button {
-    display: inline-block;
-    padding: 10px 25px;
-    border: 2px solid #2CFF43;
-    border-radius: 14px;
-    color: #2CFF43;
-    text-decoration: none;
-    font-size: 1.08rem;
-    font-weight: 800;
+  display: inline-block;
+  padding: 10px 25px;
+  border: 2px solid #2CFF43;
+  border-radius: 14px;
+  color: #2CFF43;
+  text-decoration: none;
+  font-size: 1.08rem;
+  font-weight: 800;
 }
 
 .hero-note {
-    margin-top: 14px;
-    text-align: center;
-    color: #F4EFE6;
-    font-size: 0.66rem;
-    line-height: 1.6;
+  margin-top: 12px;
+  text-align: center;
+  color: #F4EFE6;
+  font-size: 0.66rem;
+  line-height: 1.6;
 }
 
 .hero-note .bold {
-    font-weight: 800;
+  font-weight: 800;
 }
 
-@media (max-width: 430px) {
-
-    .hero-content {
-        width: 78%;
-        top: 49%;
-    }
-
-    .hero-title {
-        font-size: 2.45rem;
-    }
+/* bottom stats bar */
+.stats-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 104px;
+  background: #1b1b1b;
+  border-top: 1px solid rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 18px 12px 16px;
+  color: #f4efe6;
+  z-index: 4;
 }
 
+.stat-item {
+  text-align: center;
+  width: 25%;
+}
+
+.stat-number {
+  font-size: 1.65rem;
+  line-height: 1;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 0.6rem;
+  line-height: 1.25;
+  font-weight: 700;
+  opacity: 0.95;
+}
+
+@media (min-width: 481px) {
+  .hero {
+    height: 853px;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero-content {
+    top: 45%;
+    width: 80%;
+  }
+
+  .hero-title {
+    font-size: 2.32rem;
+  }
+
+  .hero-sub {
+    font-size: 0.96rem;
+    margin-bottom: 26px;
+  }
+
+  .hero-body {
+    font-size: 0.69rem;
+    margin-bottom: 24px;
+  }
+
+  .hero-button {
+    font-size: 1rem;
+  }
+}
 </style>
 </head>
 
@@ -125,36 +204,61 @@ html, body {
 
 <section class="hero">
 
-<div class="hero-content">
+  <div class="top-black-strip"></div>
+  <div class="top-neon-strip"></div>
 
-<h1 class="hero-title">רשות להצליח.</h1>
+  <div class="hero-content">
 
-<div class="hero-sub">
-מודל אימון הורי חדש בוואטסאפ<br>
-חשיבה משותפת ומענה בזמן אמת.
-</div>
+    <h1 class="hero-title">רשות להצליח.</h1>
 
-<div class="hero-body">
-אל תתפשרו על איך שהבית שלכם נראה היום.<br>
-אם אתם עסוקים רוב הזמן בכיבוי שריפות,<br>
-זה לא כי חסרים לכם טיפים.<br><br>
+    <div class="hero-sub">
+      מודל אימון הורי חדש בוואטסאפ<br>
+      חשיבה משותפת ומענה בזמן אמת.
+    </div>
 
-יש דרך אחרת לפעול. מדויקת יותר, מודעת יותר,<br>
-שמחזירה לכם את השליטה על מה שקורה בבית.
-</div>
+    <div class="hero-body">
+      אל תתפשרו על איך שהבית שלכם נראה היום.<br>
+      אם אתם עסוקים רוב הזמן בכיבוי שריפות,<br>
+      זה לא כי חסרים לכם טיפים.<br><br>
 
-<div class="hero-button-wrap">
-<a class="hero-button" href="https://wa.me/359877447040">
-התחילו שבוע ניסיון
-</a>
+      יש דרך אחרת לפעול. מדויקת יותר, מודעת יותר,<br>
+      שמחזירה לכם את השליטה על מה שקורה בבית.
+    </div>
 
-<div class="hero-note">
-<span class="bold">חינם למשך שבוע ואחרי זה 89 ₪ לחודש</span><br>
-לחיצה על הכפתור תפתח חלון צ׳ט וואטסאפ איתי
-</div>
-</div>
+    <div class="hero-button-wrap">
+      <a class="hero-button" href="https://wa.me/359877447040" target="_blank">
+        התחילו שבוע ניסיון
+      </a>
 
-</div>
+      <div class="hero-note">
+        <span class="bold">חינם למשך שבוע ואחרי זה 89 ₪ לחודש</span><br>
+        לחיצה על הכפתור תפתח חלון צ׳ט וואטסאפ איתי
+      </div>
+    </div>
+
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-number">7K+</div>
+      <div class="stat-label">עוקבים<br>ברשתות</div>
+    </div>
+
+    <div class="stat-item">
+      <div class="stat-number">10+</div>
+      <div class="stat-label">שנות<br>פעילות</div>
+    </div>
+
+    <div class="stat-item">
+      <div class="stat-number">1,800+</div>
+      <div class="stat-label">ילדים<br>במערכת</div>
+    </div>
+
+    <div class="stat-item">
+      <div class="stat-number">321</div>
+      <div class="stat-label">ילדים<br>שלימדתי</div>
+    </div>
+  </div>
 
 </section>
 
