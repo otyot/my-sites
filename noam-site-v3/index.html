@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hero + Form</title>
+<title>Hero + Form + About</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -340,6 +340,142 @@ textarea{
     }
 }
 
+/* SECTION 3 ABOUT */
+
+.section-3{
+    background-image:url("images/bg-section-3.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    padding:72px 0 76px;
+    color:#f4efe4;
+}
+
+.about-container{
+    width:78%;
+    max-width:420px;
+    margin:0 auto;
+    text-align:right;
+}
+
+.about-video-card{
+    width:100%;
+    aspect-ratio:9 / 13.5;
+    background:#f4f4f4;
+    border-radius:22px;
+    overflow:hidden;
+    position:relative;
+    margin-bottom:42px;
+}
+
+.about-video-card video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.video-toggle{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:68px;
+    height:68px;
+    border:3px solid #000;
+    border-radius:50%;
+    background:rgba(255,255,255,0.72);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:5;
+}
+
+.video-toggle span{
+    font-size:26px;
+    color:#000;
+    line-height:1;
+    transform:translateX(-1px);
+}
+
+.about-title{
+    margin:0 0 24px 0;
+    font-size:2.35rem;
+    line-height:1.05;
+    font-weight:900;
+    letter-spacing:-0.03em;
+    color:#f4efe4;
+}
+
+.about-body{
+    font-size:0.92rem;
+    line-height:1.85;
+    font-weight:500;
+    color:#f4efe4;
+}
+
+.about-body p{
+    margin:0 0 18px 0;
+}
+
+.about-body p:last-child{
+    margin-bottom:0;
+}
+
+@media (max-width:430px){
+
+    .section-3{
+        padding:62px 0 68px;
+    }
+
+    .about-container{
+        width:82%;
+        text-align:center;
+    }
+
+    .about-video-card{
+        border-radius:20px;
+        margin-bottom:38px;
+    }
+
+    .about-title{
+        font-size:2.05rem;
+        line-height:1.06;
+        margin-bottom:22px;
+    }
+
+    .about-body{
+        font-size:0.82rem;
+        line-height:1.7;
+    }
+
+    .about-body p{
+        margin-bottom:15px;
+    }
+
+    .video-toggle{
+        width:62px;
+        height:62px;
+    }
+
+    .video-toggle span{
+        font-size:24px;
+    }
+}
+
+@media (max-width:380px){
+
+    .about-title{
+        font-size:1.88rem;
+    }
+
+    .about-body{
+        font-size:0.78rem;
+        line-height:1.65;
+    }
+}
+
 </style>
 </head>
 
@@ -348,7 +484,7 @@ textarea{
 <div class="page">
 
 <div class="version-label">
-VERSION 12:34
+VERSION 11:53
 </div>
 
 <section class="hero">
@@ -480,6 +616,46 @@ VERSION 12:34
 
 </section>
 
+<section class="section-3">
+
+<div class="about-container">
+
+<div class="about-video-card">
+<video id="aboutVideo" src="videos/about-video.mp4" autoplay muted loop playsinline></video>
+
+<button class="video-toggle" type="button" onclick="toggleAboutVideo()" aria-label="Play or pause video">
+<span id="videoIcon">❚❚</span>
+</button>
+</div>
+
+<h2 class="about-title">
+כשמשנים את הדרך<br>
+התמונה משתנה.
+</h2>
+
+<div class="about-body">
+<p>
+כשמשנים את הדרך שבה אנחנו מגיבים,<br>
+כל הדינמיקה בבית משתנה.
+</p>
+
+<p>
+במשך השנים ראיתי שוב ושוב,<br>
+שהקושי האמיתי לא מתחיל בילד -<br>
+אלא במה שקורה בתוך הרגעים עצמם.
+</p>
+
+<p>
+שינוי גדול מתחיל דווקא בתגובה קטנה אחרת.<br>
+ולהמשיך לבחור בה, גם כשהמציאות לוחצת<br>
+לחזור אחורה למוכר והבטוח.
+</p>
+</div>
+
+</div>
+
+</section>
+
 </div>
 
 <script>
@@ -495,6 +671,19 @@ function validateIsraeliPhone(){
 
     phoneField.value = digitsOnly;
     return true;
+}
+
+function toggleAboutVideo(){
+    const video = document.getElementById("aboutVideo");
+    const icon = document.getElementById("videoIcon");
+
+    if(video.paused){
+        video.play();
+        icon.textContent = "❚❚";
+    }else{
+        video.pause();
+        icon.textContent = "▶";
+    }
 }
 </script>
 
