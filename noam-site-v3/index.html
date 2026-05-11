@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hero + Form + About + Offer</title>
+<title>נועם שמיר • לוחש להורים</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,10 +32,14 @@ html,body{
     left:50%;
     transform:translateX(-50%);
     z-index:20;
-    color:#ffe600;
-    font-size:12px;
-    font-weight:800;
-    letter-spacing:0.08em;
+    color:#c8c1b6;
+    opacity:0.42;
+    font-size:0.96rem;
+    line-height:1.48;
+    font-weight:500;
+    letter-spacing:0;
+    white-space:nowrap;
+    font-family:'Heebo',sans-serif;
 }
 
 /* HERO */
@@ -575,7 +579,7 @@ textarea{
 <div class="page">
 
 <div class="version-label">
-FINAL VERSION
+נועם שמיר • לוחש להורים
 </div>
 
 <!-- HERO -->
@@ -719,146 +723,6 @@ FINAL VERSION
 
 </section>
 
-<!-- SECTION 3 -->
-
-<section class="section-3">
-
-<div class="about-container">
-
-<div class="about-video-card">
-
-<video
-id="aboutVideo"
-src="videos/about-video.mp4"
-autoplay
-muted
-loop
-playsinline
-></video>
-
-<button class="video-corner-button" type="button" onclick="toggleVideoSound()">
-
-<svg viewBox="0 0 24 24">
-<path d="M3 9v6h4l5 5V4L7 9H3z"/>
-</svg>
-
-</button>
-
-</div>
-
-<div class="about-text">
-
-<h2 class="about-title">
-כשמשנים את הדרך<br>
-התמונה משתנה.
-</h2>
-
-<div class="about-body">
-
-<p>
-כשמשנים את הדרך שבה אנחנו מגיבים,<br>
-כל הדינמיקה בבית משתנה.
-</p>
-
-<p>
-במשך השנים ראיתי שוב ושוב,<br>
-שהקושי האמיתי לא מתחיל בילד -<br>
-אלא במה שקורה בתוך הרגעים עצמם.
-</p>
-
-<p>
-שינוי גדול מתחיל דווקא בתגובה קטנה אחרת.<br>
-ולהמשיך לבחור בה, גם כשהמציאות לוחצת<br>
-לחזור אחורה למוכר והבטוח.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- SECTION 4 -->
-
-<section class="section-4">
-
-<div class="section-4-container">
-
-<h2 class="section-4-title">
-הורות רמה #3
-</h2>
-
-<div class="section-4-sub">
-מודל אימון הורי חדש בוואטסאפ
-</div>
-
-<div class="section-4-sub-soft">
-כשהתגובה הופכת לבחירה
-</div>
-
-<div class="section-4-body">
-
-<p>
-לא עוד סרטונים, ולא עוד טיפים<br>
-כלליים שלא קשורים למה שקורה<br>
-אצלכם בבית.
-</p>
-
-<p>
-אתם שולחים בוואטסאפ סיטואציה<br>
-אמיתית מהיום יום:
-</p>
-
-<p class="concrete-block">
-מה הילד עשה.<br>
-מה הוא אמר.<br>
-איך הגבתם.<br>
-ומה קרה אחר כך.
-</p>
-
-<p>
-ומקבלים ממני כיוון בזמן אמת.
-</p>
-
-<p>
-לפעמים זו תהיה תשובה קצרה.<br>
-לפעמים שינוי קטן בניסוח.<br>
-ולפעמים הסתכלות אחרת לגמרי<br>
-על מה שקורה מולכם.
-</p>
-
-<p>
-המטרה היא לא "להשתיק" את הילד.<br>
-אלא להבין מה באמת מנהל את הסיטואציה,<br>
-ואיך מגיבים אליה אחרת.
-</p>
-
-<p>
-עם הזמן, ההסתכלות משתנה.<br>
-ואז גם הדרך שבה הבית מגיב.
-</p>
-
-</div>
-
-<div class="section-4-button-wrap">
-
-<a class="section-4-button" href="https://wa.me/359877447040" target="_blank">
-התחילו שבוע ניסיון
-</a>
-
-<div class="section-4-note">
-<span class="bold">חינם למשך שבוע ואחרי זה 89 ₪ לחודש</span><br>
-לחיצה על הכפתור תפתח חלון צ׳ט וואטסאפ איתי
-</div>
-
-</div>
-
-</div>
-
-</section>
-
 </div>
 
 <script>
@@ -877,37 +741,6 @@ function validateIsraeliPhone(){
     phoneField.value = digitsOnly;
     return true;
 }
-
-function toggleVideoSound(){
-
-    const video = document.getElementById("aboutVideo");
-
-    if(video.muted){
-        video.muted = false;
-        video.play();
-    }else{
-        video.muted = true;
-    }
-}
-
-const observer = new IntersectionObserver((entries)=>{
-
-    entries.forEach(entry=>{
-
-        const video = entry.target;
-
-        if(entry.isIntersecting){
-            video.play();
-        }else{
-            video.pause();
-        }
-    });
-
-},{
-    threshold:0.45
-});
-
-observer.observe(document.getElementById("aboutVideo"));
 
 </script>
 
