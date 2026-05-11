@@ -354,14 +354,32 @@ textarea{
     max-width:420px;
     margin:0 auto;
     text-align:right;
+    position:relative;
+    left:-14px;
 }
 
 .section-4-title{
-    margin:0 0 28px 0;
+    margin:0 0 10px 0;
     font-size:2.35rem;
     line-height:1.04;
     font-weight:900;
     letter-spacing:-0.03em;
+    color:#f4efe4;
+}
+
+.section-4-sub{
+    margin:0 0 8px 0;
+    color:#d9ff39;
+    font-size:0.96rem;
+    line-height:1.48;
+    font-weight:800;
+}
+
+.section-4-sub-soft{
+    margin:0 0 34px 0;
+    font-size:0.96rem;
+    line-height:1.48;
+    font-weight:500;
     color:#f4efe4;
 }
 
@@ -373,12 +391,25 @@ textarea{
 }
 
 .section-4-body p{
-    margin:0 0 22px 0;
+    margin:0 0 24px 0;
+}
+
+.section-4-body p:last-child{
+    margin-bottom:0;
+}
+
+.section-4-body .concrete-block{
+    font-weight:700;
+    color:#ffffff;
+    margin-top:4px;
+    margin-bottom:26px;
 }
 
 .section-4-button-wrap{
-    margin-top:42px;
+    margin-top:44px;
     text-align:center;
+    position:relative;
+    left:14px;
 }
 
 .section-4-button{
@@ -512,12 +543,23 @@ textarea{
 
     .section-4-container{
         width:82%;
+        left:-10px;
     }
 
     .section-4-title{
         font-size:2.05rem;
         line-height:1.05;
-        margin-bottom:24px;
+        margin-bottom:9px;
+    }
+
+    .section-4-sub,
+    .section-4-sub-soft{
+        font-size:0.82rem;
+        line-height:1.35;
+    }
+
+    .section-4-sub-soft{
+        margin-bottom:30px;
     }
 
     .section-4-body{
@@ -526,7 +568,12 @@ textarea{
     }
 
     .section-4-body p{
-        margin-bottom:18px;
+        margin-bottom:20px;
+    }
+
+    .section-4-button-wrap{
+        margin-top:40px;
+        left:10px;
     }
 
     .section-4-button{
@@ -586,6 +633,14 @@ textarea{
         left:-8px;
     }
 
+    .section-4-container{
+        left:-8px;
+    }
+
+    .section-4-button-wrap{
+        left:8px;
+    }
+
     .section-4-button{
         padding:7px 24px 8px;
         font-size:0.86rem;
@@ -604,7 +659,7 @@ textarea{
 <div class="page">
 
 <div class="version-label">
-VERSION 7:17
+VERSION 9:10
 </div>
 
 <section class="hero">
@@ -798,22 +853,31 @@ playsinline
 <div class="section-4-container">
 
 <h2 class="section-4-title">
-הורות רמה #3<br>
-כשהתגובה הופכת לבחירה
+הורות רמה #3
 </h2>
+
+<div class="section-4-sub">
+מודל אימון הורי חדש בוואטסאפ
+</div>
+
+<div class="section-4-sub-soft">
+כשהתגובה הופכת לבחירה
+</div>
 
 <div class="section-4-body">
 
 <p>
-לא עוד סרטונים.<br>
-ולא עוד טיפים כלליים שלא קשורים למה שקורה אצלכם בבית.
+לא עוד סרטונים, ולא עוד טיפים<br>
+כלליים שלא קשורים למה שקורה<br>
+אצלכם בבית.
 </p>
 
 <p>
-אתם שולחים בוואטסאפ סיטואציה אמיתית מהיום יום.
+אתם שולחים בוואטסאפ סיטואציה<br>
+אמיתית מהיום יום:
 </p>
 
-<p>
+<p class="concrete-block">
 מה הילד עשה.<br>
 מה הוא אמר.<br>
 איך הגבתם.<br>
@@ -827,7 +891,8 @@ playsinline
 <p>
 לפעמים זו תהיה תשובה קצרה.<br>
 לפעמים שינוי קטן בניסוח.<br>
-ולפעמים הסתכלות אחרת לגמרי על מה שקורה מולכם.
+ולפעמים הסתכלות אחרת לגמרי<br>
+על מה שקורה מולכם.
 </p>
 
 <p>
