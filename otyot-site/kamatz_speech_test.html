@@ -17,13 +17,7 @@
     justify-content: center;
     padding: 20px;
   }
-  h1 {
-    font-size: 1.4rem;
-    color: #a0c4ff;
-    margin-bottom: 30px;
-    text-align: center;
-    letter-spacing: 1px;
-  }
+  h1 { font-size: 1.4rem; color: #a0c4ff; margin-bottom: 30px; text-align: center; }
   #card {
     background: white;
     border-radius: 24px;
@@ -35,101 +29,39 @@
     width: 320px;
     box-shadow: 0 8px 40px rgba(0,0,0,0.4);
   }
-  #char-img {
-    width: 200px;
-    height: 200px;
-    object-fit: contain;
-  }
-  #sound-label {
-    font-size: 1rem;
-    color: #888;
-    font-style: italic;
-  }
+  #char-img { width: 200px; height: 200px; object-fit: contain; }
+  #sound-label { font-size: 1rem; color: #888; font-style: italic; min-height: 22px; }
   #mic-btn {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: none;
-    background: #e63946;
-    cursor: pointer;
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 4px 15px rgba(230,57,70,0.4);
+    width: 80px; height: 80px; border-radius: 50%; border: none;
+    background: #e63946; cursor: pointer; font-size: 2rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; box-shadow: 0 4px 15px rgba(230,57,70,0.4);
   }
-  #mic-btn:hover { transform: scale(1.05); }
-  #mic-btn.listening {
-    background: #ff6b6b;
-    animation: pulse 1s infinite;
-  }
+  #mic-btn:disabled { opacity: 0.5; cursor: default; }
+  #mic-btn.listening { background: #ff6b6b; animation: pulse 1s infinite; }
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(230,57,70,0.6); }
     70% { box-shadow: 0 0 0 20px rgba(230,57,70,0); }
     100% { box-shadow: 0 0 0 0 rgba(230,57,70,0); }
   }
-  #status {
-    font-size: 0.85rem;
-    color: #666;
-    min-height: 20px;
-    text-align: center;
-  }
-  #feedback {
-    font-size: 3rem;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #heard {
-    font-size: 0.8rem;
-    color: #aaa;
-    min-height: 18px;
-    text-align: center;
-    direction: ltr;
-  }
+  #status { font-size: 0.85rem; color: #666; min-height: 20px; text-align: center; }
+  #feedback { font-size: 3rem; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+  #heard { font-size: 0.8rem; color: #aaa; min-height: 18px; text-align: center; }
   #next-btn {
-    display: none;
-    padding: 12px 36px;
-    border-radius: 50px;
-    border: none;
-    background: #2196f3;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
+    display: none; padding: 12px 36px; border-radius: 50px; border: none;
+    background: #2196f3; color: white; font-size: 1rem; cursor: pointer;
   }
-  #next-btn:hover { background: #1976d2; }
-  #counter {
-    font-size: 0.85rem;
-    color: #a0c4ff;
-    margin-top: 10px;
-  }
+  #counter { font-size: 0.85rem; color: #a0c4ff; margin-top: 10px; }
   .correct { color: #4caf50; }
   .wrong { color: #e63946; }
-  #score-bar {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 320px;
-  }
-  .score-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #444;
-  }
+  #score-bar { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; justify-content: center; max-width: 320px; }
+  .score-dot { width: 12px; height: 12px; border-radius: 50%; background: #444; }
   .score-dot.ok { background: #4caf50; }
   .score-dot.fail { background: #e63946; }
 </style>
 </head>
 <body>
-
 <h1>🎯 בדיקת זיהוי קול - קמץ</h1>
-
 <div id="card">
   <img id="char-img" src="" alt="character">
   <div id="sound-label"></div>
@@ -139,7 +71,6 @@
   <div id="heard"></div>
   <button id="next-btn" onclick="nextCard()">הבא ←</button>
 </div>
-
 <div id="counter"></div>
 <div id="score-bar"></div>
 
@@ -329,57 +260,67 @@ const DICTIONARY = [
   }
 ];
 
-// Tolerance lists - what the speech recognizer might return for each sound
+// STRICT tolerance — each sound only accepts its own phonetic family
+// Hebrew recognizer returns Hebrew chars; we match against those
+// Removed "אה" from AH list — too permissive (catches EH as well)
 const TOLERANCE = {
-  "AH":  ["א", "ah", "a", "אה", "עא", "אא", "ע", "ha", "עה"],
-  "BA":  ["בא", "בה", "ב", "ba", "בב"],
-  "VA":  ["וא", "ו", "va", "וה", "בא", "ב"],
-  "GA":  ["גא", "ג", "ga", "גה"],
-  "DA":  ["דא", "ד", "da", "דה"],
-  "HA":  ["הא", "ה", "ha", "הה"],
-  "ZA":  ["זא", "ז", "za", "זה"],
-  "CHA": ["חא", "ח", "cha", "kha", "ha", "חה", "כא", "כ", "xa"],
-  "TA":  ["טא", "ט", "תא", "ת", "ta", "טה", "תה"],
-  "YA":  ["יא", "י", "ya", "יה"],
-  "KA":  ["כא", "כ", "קא", "ק", "ka", "כה", "קה"],
-  "LA":  ["לא", "ל", "la", "לה"],
-  "MA":  ["מא", "מ", "ma", "מה"],
-  "NA":  ["נא", "נ", "na", "נה"],
-  "SA":  ["סא", "ס", "שא", "sa", "סה", "שה"],
-  "PA":  ["פא", "פ", "pa", "פה"],
-  "FA":  ["פא", "פ", "fa", "פה", "ף"],
-  "TZA": ["צא", "צ", "tza", "צה", "tsа"],
-  "RA":  ["רא", "ר", "ra", "רה"],
-  "SHA": ["שא", "ש", "sha", "שה"]
+  "AH":  ["א", "עא", "ע", "אא"],
+  "BA":  ["בא", "בה", "ב"],
+  "VA":  ["וא", "וה", "ו"],
+  "GA":  ["גא", "גה", "ג"],
+  "DA":  ["דא", "דה", "ד"],
+  "HA":  ["הא", "הה", "ה"],
+  "ZA":  ["זא", "זה", "ז"],
+  "CHA": ["חא", "חה", "ח", "כא", "כה", "כ"],
+  "TA":  ["טא", "טה", "ט", "תא", "תה", "ת"],
+  "YA":  ["יא", "יה", "י"],
+  "KA":  ["כא", "כה", "כ", "קא", "קה", "ק"],
+  "LA":  ["לא", "לה", "ל"],
+  "MA":  ["מא", "מה", "מ"],
+  "NA":  ["נא", "נה", "נ"],
+  "SA":  ["סא", "סה", "ס", "שא", "שה"],
+  "PA":  ["פא", "פה"],
+  "FA":  ["פ", "ף", "פה"],
+  "TZA": ["צא", "צה", "צ"],
+  "RA":  ["רא", "רה", "ר"],
+  "SHA": ["שא", "שה", "ש"]
 };
+
+// Note: PA="פא","פה" vs FA="פ","ף","פה"
+// Shared "פה" is acceptable — if recognizer returns bare פה it's ambiguous anyway
+// The key distinction: PA requires alef suffix (פא) which recognizer gives for plosive P sound
+
+function matches(transcript, sound) {
+  const t = transcript.trim();
+  const terms = TOLERANCE[sound] || [];
+  return terms.some(term => t.includes(term));
+}
 
 let deck = [];
 let current = null;
 let round = 0;
 let correct = 0;
-let recognition = null;
 
 function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  return arr;
+  return a;
 }
 
 function initDeck() {
-  deck = shuffle([...DICTIONARY]);
+  deck = shuffle(DICTIONARY);
   round = 0;
   correct = 0;
   document.getElementById('score-bar').innerHTML = '';
+  document.getElementById('counter').textContent = '';
   nextCard();
 }
 
 function nextCard() {
-  if (round >= deck.length) {
-    showFinal();
-    return;
-  }
+  if (round >= deck.length) { showFinal(); return; }
   current = deck[round];
   round++;
   document.getElementById('char-img').src = current.img;
@@ -392,32 +333,62 @@ function nextCard() {
   document.getElementById('counter').textContent = round + ' / ' + deck.length;
 }
 
-function checkAnswer(transcript) {
-  const t = transcript.trim().toLowerCase();
-  const expected = current.sound;
-  const accepted = TOLERANCE[expected] || [];
-  
-  // Direct match or tolerance match
-  const isCorrect = accepted.some(a => t.includes(a.toLowerCase())) ||
-                    t.includes(expected.toLowerCase());
-  
-  const feedbackEl = document.getElementById('feedback');
-  const heardEl = document.getElementById('heard');
-  
-  heardEl.textContent = 'שמעתי: "' + transcript + '"';
-  
+function startListening() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    document.getElementById('status').textContent = 'נדרש Chrome. אנא פתח ב-Chrome.';
+    return;
+  }
+  const btn = document.getElementById('mic-btn');
+  btn.classList.add('listening');
+  btn.disabled = true;
+  document.getElementById('status').textContent = '🔴 מקשיב...';
+
+  const r = new SpeechRec();
+  r.lang = 'he-IL';
+  r.interimResults = false;
+  r.maxAlternatives = 5;
+
+  r.onresult = (e) => {
+    btn.classList.remove('listening');
+    // Collect all alternatives
+    let allText = '';
+    for (let i = 0; i < e.results[0].length; i++) {
+      allText += e.results[0][i].transcript + ' ';
+    }
+    allText = allText.trim();
+    evaluateAnswer(allText);
+  };
+
+  r.onerror = (e) => {
+    btn.classList.remove('listening');
+    document.getElementById('status').textContent = 'שגיאה: ' + e.error;
+    document.getElementById('next-btn').style.display = 'block';
+    addDot(false);
+  };
+
+  r.onend = () => {
+    btn.classList.remove('listening');
+  };
+
+  r.start();
+}
+
+function evaluateAnswer(transcript) {
+  const isCorrect = matches(transcript, current.sound);
+  document.getElementById('heard').textContent = 'שמעתי: "' + transcript + '"';
+  document.getElementById('status').textContent = '';
+
   if (isCorrect) {
-    feedbackEl.innerHTML = '<span class="correct">✓ נכון!</span>';
+    document.getElementById('feedback').innerHTML = '<span class="correct">✓ נכון!</span>';
     correct++;
     addDot(true);
   } else {
-    feedbackEl.innerHTML = '<span class="wrong">✗ לא נכון</span>';
-    document.getElementById('sound-label').textContent = 'התשובה הנכונה: ' + expected;
+    document.getElementById('feedback').innerHTML = '<span class="wrong">✗ לא נכון</span>';
+    document.getElementById('sound-label').textContent = 'תשובה נכונה: ' + current.sound;
     addDot(false);
   }
-  
   document.getElementById('next-btn').style.display = 'block';
-  document.getElementById('mic-btn').disabled = true;
 }
 
 function addDot(ok) {
@@ -429,59 +400,15 @@ function addDot(ok) {
 
 function showFinal() {
   document.getElementById('card').innerHTML = `
-    <div style="text-align:center; padding: 20px; color: #333;">
-      <div style="font-size:4rem;">🎉</div>
-      <div style="font-size:1.5rem; font-weight:bold; margin: 10px 0;">סיום!</div>
-      <div style="font-size:1.1rem; color:#555;">${correct} מתוך ${deck.length} נכון</div>
-      <button onclick="initDeck()" style="margin-top:20px; padding:12px 30px; background:#2196f3; color:white; border:none; border-radius:50px; font-size:1rem; cursor:pointer;">שחק שוב</button>
-    </div>
-  `;
+    <div style="text-align:center;padding:20px;color:#333;">
+      <div style="font-size:4rem">🎉</div>
+      <div style="font-size:1.5rem;font-weight:bold;margin:10px 0">סיום!</div>
+      <div style="font-size:1.1rem;color:#555">${correct} מתוך ${deck.length} נכון</div>
+      <button onclick="initDeck()" style="margin-top:20px;padding:12px 30px;background:#2196f3;color:white;border:none;border-radius:50px;font-size:1rem;cursor:pointer">שחק שוב</button>
+    </div>`;
+  document.getElementById('counter').textContent = '';
 }
 
-function startListening() {
-  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-    document.getElementById('status').textContent = 'הדפדפן לא תומך בזיהוי קול. נסה Chrome.';
-    return;
-  }
-  
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRecognition();
-  recognition.lang = 'he-IL';
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 3;
-  
-  const btn = document.getElementById('mic-btn');
-  btn.classList.add('listening');
-  document.getElementById('status').textContent = '🔴 מקשיב...';
-  
-  recognition.onresult = (event) => {
-    btn.classList.remove('listening');
-    // Try all alternatives
-    let bestTranscript = '';
-    for (let i = 0; i < event.results[0].length; i++) {
-      bestTranscript += event.results[0][i].transcript + ' ';
-    }
-    checkAnswer(bestTranscript.trim());
-  };
-  
-  recognition.onerror = (event) => {
-    btn.classList.remove('listening');
-    document.getElementById('status').textContent = 'שגיאה: ' + event.error;
-    document.getElementById('next-btn').style.display = 'block';
-    addDot(false);
-  };
-  
-  recognition.onend = () => {
-    btn.classList.remove('listening');
-    if (!document.getElementById('feedback').textContent) {
-      document.getElementById('status').textContent = 'לא שמעתי כלום. נסה שוב.';
-    }
-  };
-  
-  recognition.start();
-}
-
-// Start
 initDeck();
 </script>
 </body>
