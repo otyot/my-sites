@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>סבא - Episode Saba</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
+
+  :root {
+    --bg: #fffdf7;
+    --accent: #ff6b35;
+    --accent2: #4ecdc4;
+    --dark: #2d2d2d;
+    --narration-bg: rgba(255,255,255,0.95);
+    --canvas-w: 390px;
+    --canvas-h: 680px;
+  }
+
+  body {
+    background: #e8e0d5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Heebo', sans-serif;
+    overflow: hidden;
+    padding: 20px 0;
+  }
+
+  #app {
+    margin: auto;
+  }
+
+  #app {
+    width: var(--canvas-w);
+    height: var(--canvas-h);
+    background: var(--bg);
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Progress bar */
+  #progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+    z-index: 100;
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* Slide counter */
+  #slide-counter {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    font-size: 0.7rem;
+    color: #aaa;
+    z-index: 100;
+    font-family: 'Fredoka One', cursive;
+  }
+
+  /* Main canvas area */
+  #canvas {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: white;
+    isolation: isolate;
+  }
+
+  /* Image layers */
+  .layer-base {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    z-index: 1;
+  }
+
+  .layer-char {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    z-index: 2;
+  }
+
+  .layer-element {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    z-index: 3;
+  }
+
+  /* Placeholder boxes for images not yet provided */
+  .placeholder {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    font-family: 'Fredoka One', cursive;
+    text-align: center;
+    padding: 20px;
+    transition: opacity 0.5s ease;
+  }
+
+  .placeholder-char {
+    width: 220px; height: 220px;
+    background: #fff8f0;
+    border: 3px dashed #ffb347;
+    color: #ffb347;
+    font-size: 0.85rem;
+  }
+
+  .placeholder-img {
+    width: 300px; height: 300px;
+    background: #f0fff8;
+    border: 3px dashed #4ecdc4;
+    color: #4ecdc4;
+    font-size: 0.85rem;
+  }
+
+  .placeholder-element {
+    width: 300px; height: 300px;
+    background: transparent;
+    border: 3px dashed #ff6b35;
+    color: #ff6b35;
+    font-size: 0.85rem;
+  }
+
+  .placeholder .icon { font-size: 3rem; margin-bottom: 8px; }
+  .placeholder .label { font-size: 0.8rem; line-height: 1.3; }
+
+  /* Two characters side by side */
+  #two-chars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .char-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+  }
+
+  /* Arrow indicator */
+  .arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 28px solid transparent;
+    border-right: 28px solid transparent;
+    border-bottom: 50px solid #4a90e2;
+    filter: drop-shadow(0 4px 8px rgba(74,144,226,0.5));
+    animation: bounce 0.7s infinite alternate;
+    margin: 0 auto;
+  }
+
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+  }
+
+  /* Real letters display */
+  #letters-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+    direction: rtl;
+  }
+
+  .letter-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .real-letter {
+    font-size: 5rem;
+    font-family: 'Heebo', sans-serif;
+    font-weight: 900;
+    color: var(--dark);
+    line-height: 1;
+  }
+
+
+
+  /* Grandfather celebration */
+  #celebration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 20px;
+  }
+
+  .saba-word {
+    font-size: 5rem;
+    font-family: 'Heebo', sans-serif;
+    font-weight: 900;
+    color: var(--dark);
+    direction: rtl;
+  }
+
+  .grandpa-placeholder {
+    width: 160px; height: 200px;
+    background: #fff0e8;
+    border: 3px dashed #ff6b35;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: #ff6b35;
+  }
+
+  /* Stars animation */
+  .stars {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: fall 2s linear infinite;
+  }
+
+  @keyframes fall {
+    from { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    to { transform: translateY(720px) rotate(360deg); opacity: 0; }
+  }
+
+  /* Narration area */
+  #narration {
+    background: var(--narration-bg);
+    border-top: 2px solid #f0ebe0;
+    padding: 16px 20px;
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  #narration-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark);
+    text-align: center;
+    line-height: 1.4;
+    direction: ltr;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #tap-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 36px;
+    font-size: 1rem;
+    font-family: 'Fredoka One', cursive;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255,107,53,0.35);
+    transition: transform 0.1s, box-shadow 0.1s;
+    letter-spacing: 0.5px;
+  }
+
+  #tap-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(255,107,53,0.25);
+  }
+
+  /* Phase label */
+  #phase-label {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: var(--accent2);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    z-index: 100;
+    letter-spacing: 0.5px;
+  }
+
+  /* No fade transition - instant flip */
+  #canvas { transition: none; }
+  #canvas.fade { opacity: 1; }
+
+  /* Faded image overlay */
+  .img-faded { opacity: 0.2 !important; }
+
+  /* Hidden utility */
+  .hidden { display: none !important; }
+  .invisible { opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div id="progress-bar"></div>
+  <div id="slide-counter">1 / 40</div>
+  <div id="phase-label">SA</div>
+
+  <div id="canvas">
+    <!-- Dynamic content goes here -->
+  </div>
+
+  <div id="narration">
+    <div id="narration-text">This is SA</div>
+    <button id="tap-btn" onclick="nextSlide()">Tap to continue ›</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// EPISODE SABA — FULL 40-SLIDE ENGINE
+// Image files: replace placeholder content with actual <img> tags
+// pointing to your PNG files once assets are ready.
+// Naming convention:
+//   sa-sal-c.png   = SA character
+//   sa-sal-i.png   = SAL picture
+//   sa-sal-e1.png  = SA element 1 (ring)
+//   sa-sal-e2.png  = SA element 2 (nail)
+//   ba-bakbuk-c.png  = BA character
+//   ba-bakbuk-i.png  = BAKBUK picture
+//   ba-bakbuk-e1.png = BA element 1
+//   ba-bakbuk-e2.png = BA element 2
+//   ba-bakbuk-e3.png = BA element 3
+// ============================================================
+
+const TOTAL = 38; // removed 2 redundant slides
+let current = 0;
+
+// Placeholder HTML generators (replace with <img> tags when assets ready)
+const SA_C = `<img class="layer-char" src="images/sa-sal-c.png" alt="SA character">`;
+const SA_I = (faded=false) => `<img class="layer-base" src="images/sa-sal-i.png" alt="SAL picture" style="opacity:${faded?'0.2':'1'}">`;
+const SA_E1 = `<img class="layer-element" src="images/sa-sal-e1.png" alt="SA element 1">`;
+const SA_E2 = `<img class="layer-element" src="images/sa-sal-e2.png" alt="SA element 2">`;
+
+const BA_C = `<img class="layer-char" src="images/ba-bakbuk-c.png" alt="BA character">`;
+const BA_I = (faded=false) => `<img class="layer-base" src="images/ba-bakbuk-i.png" alt="BAKBUK picture" style="opacity:${faded?'0.2':'1'}">`;
+const BA_E1 = `<img class="layer-element" src="images/ba-bakbuk-e1.png" alt="BA element 1">`;
+const BA_E2 = `<img class="layer-element" src="images/ba-bakbuk-e2.png" alt="BA element 2">`;
+const BA_E3 = `<img class="layer-element" src="images/ba-bakbuk-e3.png" alt="BA element 3">`;
+
+// Arrow: see arrow-up CSS class and TWO_CHARS/LETTERS functions
+
+// Two characters side by side - BIG and centered
+// Hebrew: SA on RIGHT, BA on LEFT
+// Arrow is a big pink hand-drawn style arrow sitting below, does NOT push chars up
+function TWO_CHARS(arrowOn=null) {
+  const ARROW_HTML = `<div style="
+    width:0;height:0;
+    border-left:22px solid transparent;
+    border-right:22px solid transparent;
+    border-bottom:44px solid #e8a0b8;
+    margin:8px auto 0;
+  "></div>`;
+
+  function makeSlot(charImg, picImg, hasArrow) {
+    return `<div style="
+      position:relative;
+      width:140px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    ">
+      <div style="position:relative;width:140px;height:160px;">
+        ${hasArrow && picImg ? `<img src="${picImg}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;opacity:0.2;">` : ''}
+        <img src="${charImg}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">
+      </div>
+      ${hasArrow ? ARROW_HTML : '<div style="height:52px;"></div>'}
+    </div>`;
+  }
+
+  const saSlot = makeSlot('images/sa-sal-c.png', 'images/sa-sal-i.png', arrowOn==='sa');
+  const baSlot = makeSlot('images/ba-bakbuk-c.png', 'images/ba-bakbuk-i.png', arrowOn==='ba');
+
+  return `<div style="
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:50px;
+    width:100%;
+    height:100%;
+    padding-top:40px;
+  ">
+    ${baSlot}
+    ${saSlot}
+  </div>`;
+}
+
+// Real letters display - Hebrew right to left: סַ בָּ א
+// Arrow sits below letter, does NOT push it up
+function LETTERS(arrowOn=null) {
+  const ARROW_HTML = `<div style="
+    width:0;height:0;
+    border-left:22px solid transparent;
+    border-right:22px solid transparent;
+    border-bottom:44px solid #e8a0b8;
+    margin:10px auto 0;
+  "></div>`;
+
+  function letterBox(letter, hasArrow) {
+    return `<div style="
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      min-width:100px;
+    ">
+      <div class="real-letter">${letter}</div>
+      ${hasArrow ? ARROW_HTML : '<div style="height:54px;"></div>'}
+    </div>`;
+  }
+
+  return `<div style="
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    justify-content:center;
+    gap:10px;
+    width:100%;
+    height:100%;
+    padding-top:50px;
+  ">
+    ${letterBox('סַ', arrowOn==='sa')}
+    ${letterBox('בָּ', arrowOn==='ba')}
+    ${letterBox('א', false)}
+  </div>`;
+}
+
+// Celebration slide - grandfather image on left, סבא word on right
+function CELEBRATION() {
+  return `<div style="
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+    width:100%;
+    height:100%;
+    padding:20px;
+  ">
+    <div style="
+      width:160px;height:200px;
+      background:#fff8f0;
+      border:3px dashed #ffb347;
+      border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:4rem;
+      flex-shrink:0;
+    ">👴</div>
+    <div style="
+      font-size:4.5rem;
+      font-family:'Heebo',sans-serif;
+      font-weight:900;
+      color:#2d2d2d;
+      direction:rtl;
+      line-height:1.1;
+    ">סַבָּא</div>
+  </div>`;
+}
+
+// ============================================================
+// THE 40 SLIDES
+// Each slide: { canvas, narration, phase, btnLabel }
+// ============================================================
+const SLIDES = [
+  // === SA CYCLE ===
+  // Slide 1
+  { canvas: SA_C, narration: "This is SA. SA loves hiding in the…", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 2 (removed - redundant)
+  // Slide 3
+  { canvas: `${SA_I(false)}${SA_C}`, narration: "Sal!", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 4
+  { canvas: `${SA_I(false)}${SA_C}${SA_E1}`, narration: "This is the ring", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 5
+  { canvas: `${SA_I(false)}${SA_C}${SA_E1}${SA_E2}`, narration: "And this is the nail they threw in the Sal", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 6 - SA! with faded picture
+  { canvas: `${SA_I(true)}${SA_C}`, narration: "SA!", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 7
+  { canvas: `${SA_I(true)}${SA_C}${SA_E1}`, narration: "This is the ring", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 8
+  { canvas: `${SA_I(true)}${SA_C}${SA_E1}${SA_E2}`, narration: "And this is the nail they threw in the…", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 9
+  { canvas: `${SA_I(false)}${SA_C}`, narration: "Sal!", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 10
+  { canvas: SA_C, narration: "SA likes hiding in the…?", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 11
+  { canvas: `${SA_I(false)}${SA_C}`, narration: "Sal!", phase: "SA", btn: "Tap to continue ›" },
+  // Slide 12 — transition
+  { canvas: `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:'Fredoka One',cursive;font-size:2rem;color:#ddd;">✨</div>`, narration: "Great! Now let's meet BA…", phase: "SA → BA", btn: "Meet BA ›" },
+
+  // === BA CYCLE ===
+  // Slide 13
+  { canvas: BA_C, narration: "This is BA. BA loves hiding in the…", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 14 (removed - redundant)
+  // Slide 15
+  { canvas: `${BA_I(false)}${BA_C}`, narration: "Bakbuk!", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 16
+  { canvas: `${BA_I(false)}${BA_C}${BA_E1}`, narration: "This is the cork", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 17
+  { canvas: `${BA_I(false)}${BA_C}${BA_E1}${BA_E2}`, narration: "This is the dot", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 18
+  { canvas: `${BA_I(false)}${BA_C}${BA_E1}${BA_E2}${BA_E3}`, narration: "And this is the nail of the Bakbuk", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 19 - BA! with faded picture
+  { canvas: `${BA_I(true)}${BA_C}`, narration: "BA!", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 20
+  { canvas: `${BA_I(true)}${BA_C}${BA_E1}`, narration: "This is the cork", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 21
+  { canvas: `${BA_I(true)}${BA_C}${BA_E1}${BA_E2}`, narration: "This is the dot", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 22
+  { canvas: `${BA_I(true)}${BA_C}${BA_E1}${BA_E2}${BA_E3}`, narration: "And this is the nail of the…", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 23
+  { canvas: `${BA_I(false)}${BA_C}`, narration: "Bakbuk!", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 24
+  { canvas: BA_C, narration: "BA likes hiding in the…?", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 25
+  { canvas: `${BA_I(false)}${BA_C}`, narration: "Bakbuk!", phase: "BA", btn: "Tap to continue ›" },
+  // Slide 26 — transition
+  { canvas: `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:'Fredoka One',cursive;font-size:2rem;color:#ddd;">✨</div>`, narration: "Excellent! Let's see what we remember…", phase: "Recall", btn: "Let's check ›" },
+
+  // === RECALL ===
+  // Slide 27
+  { canvas: SA_C, narration: "SA!", phase: "Recall", btn: "Tap to continue ›" },
+  // Slide 28 - char + faded picture
+  { canvas: `${SA_I(true)}${SA_C}`, narration: "Where does SA like hiding?", phase: "Recall", btn: "Tap to continue ›" },
+  // Slide 29 - char + full picture
+  { canvas: `${SA_I(false)}${SA_C}`, narration: "Sal! 🎉", phase: "Recall", btn: "Tap to continue ›" },
+  // Slide 30
+  { canvas: BA_C, narration: "BA!", phase: "Recall", btn: "Tap to continue ›" },
+  // Slide 31 - char + faded picture
+  { canvas: `${BA_I(true)}${BA_C}`, narration: "Where does BA like hiding?", phase: "Recall", btn: "Tap to continue ›" },
+  // Slide 32 - char + full picture
+  { canvas: `${BA_I(false)}${BA_C}`, narration: "Bakbuk! Well done! 🎉", phase: "Recall", btn: "Tap to continue ›" },
+
+  // === NAME THEM ===
+  // Slide 33
+  { canvas: TWO_CHARS(), narration: "Now — call them one after the other. Wait for the arrow!", phase: "Read!", btn: "Tap to continue ›" },
+  // Slide 34
+  { canvas: TWO_CHARS('sa'), narration: "Who's this? What's their name?", phase: "Read!", btn: "Tap to continue ›" },
+  // Slide 35
+  { canvas: TWO_CHARS('ba'), narration: "Who's this? What's their name?", phase: "Read!", btn: "Tap to continue ›" },
+
+  // === REAL LETTERS ===
+  // Slide 36
+  { canvas: LETTERS(), narration: "Again! Call them by their names!", phase: "Letters!", btn: "Tap to continue ›" },
+  // Slide 37
+  { canvas: LETTERS('sa'), narration: "Who's this? What's their name?", phase: "Letters!", btn: "Tap to continue ›" },
+  // Slide 38
+  { canvas: LETTERS('ba'), narration: "Who's this? What's their name?", phase: "Letters!", btn: "Tap to continue ›" },
+  // Slide 39
+  { canvas: LETTERS('both'), narration: "SABA! Saba in Hebrew means Grandfather! 👴", phase: "Letters!", btn: "Tap to continue ›" },
+
+  // === CELEBRATION ===
+  // Slide 40
+  { canvas: CELEBRATION(), narration: "Bravo! Well done! ⭐⭐⭐", phase: "🎉", btn: "Play again ›" },
+];
+
+function render() {
+  const slide = SLIDES[current];
+  const canvas = document.getElementById('canvas');
+  const narrationText = document.getElementById('narration-text');
+  const tapBtn = document.getElementById('tap-btn');
+  const progressBar = document.getElementById('progress-bar');
+  const slideCounter = document.getElementById('slide-counter');
+  const phaseLabel = document.getElementById('phase-label');
+
+  canvas.innerHTML = slide.canvas;
+  narrationText.textContent = slide.narration;
+  tapBtn.textContent = slide.btn;
+  phaseLabel.textContent = slide.phase;
+  progressBar.style.width = ((current + 1) / SLIDES.length * 100) + '%';
+  slideCounter.textContent = (current + 1) + ' / ' + SLIDES.length;
+}
+
+function nextSlide() {
+  if (current >= SLIDES.length - 1) {
+    // Restart
+    current = 0;
+  } else {
+    current++;
+  }
+  render();
+}
+
+// Tap anywhere on canvas also advances
+document.getElementById('canvas').addEventListener('click', nextSlide);
+
+// Keyboard support for testing
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+});
+
+// Initialize
+render();
+</script>
+</body>
+</html>
