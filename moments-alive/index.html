@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>רגעים חיים</title>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700;900&family=Heebo:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #100e09;
+      --bg2: #1a1610;
+      --amber: #c8922a;
+      --amber-light: #e8b55a;
+      --cream: #f0e6cc;
+      --muted: #7a6e5a;
+      --border: rgba(200,146,42,0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Heebo', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200,146,42,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Heebo', sans-serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .hero-title {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: clamp(3rem, 9vw, 7rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.4s;
+    }
+
+    .hero-title span {
+      color: var(--amber-light);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.8;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.6s;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--bg);
+      font-family: 'Heebo', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 16px 40px;
+      border-radius: 2px;
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: background 0.25s, transform 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.8s;
+    }
+
+    .hero-cta:hover {
+      background: var(--amber-light);
+      transform: translateY(-2px);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.2s;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: var(--amber);
+      margin: 10px auto 0;
+      animation: lineGrow 1.5s ease infinite;
+    }
+
+    /* ── SAMPLES ── */
+    .section {
+      padding: 100px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 56px;
+      line-height: 1.2;
+    }
+
+    .samples-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .sample-card {
+      position: relative;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      border-radius: 2px;
+    }
+
+    .sample-placeholder {
+      width: 100%;
+      aspect-ratio: 9/16;
+      background: linear-gradient(135deg, #1e1a12 0%, #2a2418 50%, #1e1a12 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sample-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(200,146,42,0.02) 3px, rgba(200,146,42,0.02) 4px);
+      pointer-events: none;
+    }
+
+    .film-icon {
+      width: 56px;
+      height: 56px;
+      border: 2px solid rgba(200,146,42,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .film-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--amber);
+      opacity: 0.6;
+    }
+
+    .sample-caption {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .sample-tag {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(200,146,42,0.15);
+      border: 1px solid var(--border);
+      color: var(--amber);
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 6px 12px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      border-top: 1px solid var(--border);
+      padding: 100px 24px;
+      background: var(--bg2);
+    }
+
+    .how-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 56px;
+    }
+
+    .step {
+      position: relative;
+    }
+
+    .step-num {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 5rem;
+      font-weight: 900;
+      color: rgba(200,146,42,0.08);
+      line-height: 1;
+      margin-bottom: -20px;
+    }
+
+    .step-title {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 12px;
+    }
+
+    .step-desc {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ── FORM ── */
+    .form-section {
+      padding: 100px 24px 120px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .price-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(200,146,42,0.1);
+      border: 1px solid var(--border);
+      color: var(--amber-light);
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 12px 24px;
+      margin-bottom: 48px;
+      border-radius: 2px;
+    }
+
+    .price-badge span {
+      font-size: 0.85rem;
+      font-family: 'Heebo', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      font-family: 'Heebo', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      padding: 14px 18px;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+      direction: rtl;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--amber);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: rgba(122,110,90,0.5);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .upload-area {
+      width: 100%;
+      border: 1px dashed rgba(200,146,42,0.35);
+      background: rgba(200,146,42,0.03);
+      border-radius: 2px;
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      position: relative;
+    }
+
+    .upload-area:hover {
+      background: rgba(200,146,42,0.07);
+      border-color: var(--amber);
+    }
+
+    .upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .upload-text {
+      color: var(--amber);
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .upload-sub {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .upload-filename {
+      margin-top: 10px;
+      color: var(--amber-light);
+      font-size: 0.85rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--amber);
+      color: var(--bg);
+      border: none;
+      font-family: 'Heebo', sans-serif;
+      font-weight: 500;
+      font-size: 1.1rem;
+      padding: 18px;
+      border-radius: 2px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.25s, transform 0.2s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      background: var(--amber-light);
+      transform: translateY(-1px);
+    }
+
+    .form-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 16px;
+      line-height: 1.7;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes lineGrow {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: top; opacity: 0; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .samples-grid { grid-template-columns: 1fr; }
+      .steps-grid   { grid-template-columns: 1fr; gap: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <p class="hero-eyebrow">AI · זיכרונות · רגשות</p>
+    <h1 class="hero-title">מה אם <span>הרגע הזה</span><br>היה יכול לזוז?</h1>
+    <p class="hero-sub">
+      שלחו לנו תמונה ישנה וסנטימנטלית — ואנחנו נהפוך אותה לסרטון וידאו מרגש של עד 10 שניות, עם כוח הבינה המלאכותית.
+    </p>
+    <a href="#form" class="hero-cta">שלחו לי את התמונה שלכם ←</a>
+    <div class="scroll-hint">גללו למטה</div>
+  </section>
+
+  <!-- ── SAMPLE VIDEOS ── -->
+  <div class="section">
+    <p class="section-label">דוגמאות</p>
+    <h2 class="section-title">ככה זה נראה</h2>
+    <div class="samples-grid">
+
+      <div class="sample-card">
+        <div class="sample-placeholder">
+          <div class="film-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
+          </div>
+          <p class="sample-caption">דוגמה בקרוב</p>
+        </div>
+        <div class="sample-tag">סרטון #1</div>
+      </div>
+
+      <div class="sample-card">
+        <div class="sample-placeholder">
+          <div class="film-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
+          </div>
+          <p class="sample-caption">דוגמה בקרוב</p>
+        </div>
+        <div class="sample-tag">סרטון #2</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <div class="how-section">
+    <div class="how-inner">
+      <p class="section-label">התהליך</p>
+      <h2 class="section-title">איך זה עובד?</h2>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3 class="step-title">שלחו תמונה</h3>
+          <p class="step-desc">העלו תמונה ישנה וסנטימנטלית — חתונה, ילדות, סבתא, יום הולדת. כל רגע שחשוב לכם.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3 class="step-title">ספרו לנו על הרגע</h3>
+          <p class="step-desc">כתבו לנו כמה מילים על מה קורה בתמונה ואיזה תחושה אתם רוצים שהסרטון יעביר.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3 class="step-title">מקבלים סרטון</h3>
+          <p class="step-desc">תוך 24-48 שעות תקבלו סרטון וידאו מרגש של עד 10 שניות — ישירות אליכם.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FORM ── -->
+  <div class="form-section" id="form">
+    <p class="section-label">בואו נתחיל</p>
+    <h2 class="section-title">שלחו לי את התמונה שלכם</h2>
+
+    <div class="price-badge">
+      ₪99 <span>לסרטון אחד · עד 10 שניות</span>
+    </div>
+
+    <form action="https://formspree.io/f/otyot.one@gmail.com" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_subject" value="הזמנה חדשה - רגעים חיים">
+      <input type="hidden" name="_language" value="he">
+
+      <div class="form-group">
+        <label for="name">שם מלא <span style="color:var(--amber)">*</span></label>
+        <input type="text" id="name" name="name" placeholder="השם שלכם" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">מספר טלפון <span style="color:var(--amber)">*</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="054-123-4567" required>
+        <p id="phone-error" style="color:#e07070;font-size:0.8rem;margin-top:6px;display:none;">אנא הזינו מספר טלפון ישראלי תקין (לדוגמה: 054-123-4567)</p>
+      </div>
+
+      <div class="form-group">
+        <label>העלו את התמונה <span style="color:var(--amber)">*</span></label>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" name="photo" accept="image/*" id="fileInput" required>
+          <span class="upload-icon">📷</span>
+          <p class="upload-text">לחצו כאן להעלאת תמונה</p>
+          <p class="upload-sub">JPG, PNG עד 10MB</p>
+          <p class="upload-filename" id="fileName"></p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">ספרו לי על הרגע <span style="color:var(--amber)">*</span></label>
+        <textarea id="description" name="description" placeholder="למשל: זאת סבתא שלי לוקחת אותי לגן ילדים, אני בן 4. היא כבר לא איתנו. רציתי שתהיה לה תנועה, חיוך, חיים..." required></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">שולחים לי עכשיו — ₪99 ←</button>
+      <p class="form-note">
+        לאחר הגשת הטופס תקבלו פרטי תשלום.<br>
+        הסרטון יישלח אליכם תוך 24-48 שעות.
+      </p>
+    </form>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <p>© 2026 רגעים חיים · כל הזכויות שמורות</p>
+  </footer>
+
+  <script>
+    // Show file name after selection
+    document.getElementById('fileInput').addEventListener('change', function() {
+      const name = this.files[0]?.name || '';
+      document.getElementById('fileName').textContent = name ? '✓ ' + name : '';
+    });
+
+    // Drag-over visual
+    const area = document.getElementById('uploadArea');
+    area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor = 'var(--amber)'; });
+    area.addEventListener('dragleave', () => { area.style.borderColor = ''; });
+    area.addEventListener('drop', () => { area.style.borderColor = ''; });
+
+    // Israeli phone validation: 05X-XXX-XXXX, 05X-XXXXXXX, or 05XXXXXXXXX
+    const phoneInput = document.getElementById('phone');
+    const phoneError = document.getElementById('phone-error');
+    const israeliPhone = /^05\d[-]?\d{3}[-]?\d{4}$/;
+
+    phoneInput.addEventListener('blur', function() {
+      if (this.value && !israeliPhone.test(this.value.trim())) {
+        phoneError.style.display = 'block';
+        this.style.borderColor = '#e07070';
+      } else {
+        phoneError.style.display = 'none';
+        this.style.borderColor = '';
+      }
+    });
+
+    // Block form submit if phone invalid
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const val = phoneInput.value.trim();
+      if (!israeliPhone.test(val)) {
+        e.preventDefault();
+        phoneError.style.display = 'block';
+        phoneInput.style.borderColor = '#e07070';
+        phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  </script>
+
+</body>
+</html>
