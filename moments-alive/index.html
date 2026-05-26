@@ -166,8 +166,8 @@
 
     .samples-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
 
     .sample-card {
@@ -176,65 +176,94 @@
       border: 1px solid var(--border);
       overflow: hidden;
       border-radius: 2px;
+      cursor: pointer;
     }
 
-    .sample-placeholder {
-      width: 100%;
-      aspect-ratio: 9/16;
-      background: linear-gradient(135deg, #1e1a12 0%, #2a2418 50%, #1e1a12 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
+    .sample-card:hover .play-btn {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: var(--amber);
+    }
+
+    .sample-card:hover .thumb-img { transform: scale(1.04); }
+
+    .thumb-wrap {
       position: relative;
+      width: 100%;
+      aspect-ratio: 1/1;
       overflow: hidden;
     }
 
-    .sample-placeholder::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: 
-        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(200,146,42,0.02) 3px, rgba(200,146,42,0.02) 4px);
-      pointer-events: none;
+    .thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      display: block;
     }
 
-    .film-icon {
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 56px;
       height: 56px;
-      border: 2px solid rgba(200,146,42,0.3);
+      background: rgba(200,146,42,0.85);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: transform 0.25s ease, background 0.25s ease;
     }
 
-    .film-icon svg {
-      width: 24px;
-      height: 24px;
-      fill: var(--amber);
-      opacity: 0.6;
+    .play-btn svg { width: 24px; height: 24px; fill: #100e09; margin-right: -3px; }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 8, 5, 0.88);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
     }
 
-    .sample-caption {
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: var(--muted);
-      text-transform: uppercase;
+    #lightbox.active { display: flex; }
+
+    #lightbox-inner {
+      position: relative;
+      max-width: 90vw;
+      max-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .sample-tag {
+    #lightbox-video {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 2px;
+      outline: none;
+      box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    }
+
+    #lightbox-close {
       position: absolute;
-      bottom: 16px;
-      right: 16px;
-      background: rgba(200,146,42,0.15);
-      border: 1px solid var(--border);
-      color: var(--amber);
-      font-size: 10px;
-      letter-spacing: 2px;
-      padding: 6px 12px;
+      top: -40px;
+      left: 0;
+      background: none;
+      border: none;
+      color: var(--cream);
+      font-size: 1.4rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      font-family: 'Heebo', sans-serif;
     }
+
+    #lightbox-close:hover { opacity: 1; }
 
     /* ── HOW IT WORKS ── */
     .how-section {
@@ -459,6 +488,10 @@
       .samples-grid { grid-template-columns: 1fr; }
       .steps-grid   { grid-template-columns: 1fr; gap: 36px; }
     }
+
+    @media (max-width: 900px) {
+      .samples-grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -480,26 +513,35 @@
     <h2 class="section-title">ככה זה נראה</h2>
     <div class="samples-grid">
 
-      <div class="sample-card">
-        <div class="sample-placeholder">
-          <div class="film-icon">
-            <svg viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
-          </div>
-          <p class="sample-caption">דוגמה בקרוב</p>
+      <div class="sample-card" onclick="openVideo('video1.mp4')">
+        <div class="thumb-wrap">
+          <img src="thumb1.jpg" alt="דוגמה 1" class="thumb-img">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
-        <div class="sample-tag">סרטון #1</div>
       </div>
 
-      <div class="sample-card">
-        <div class="sample-placeholder">
-          <div class="film-icon">
-            <svg viewBox="0 0 24 24"><path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
-          </div>
-          <p class="sample-caption">דוגמה בקרוב</p>
+      <div class="sample-card" onclick="openVideo('video2.mp4')">
+        <div class="thumb-wrap">
+          <img src="thumb2.jpg" alt="דוגמה 2" class="thumb-img">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
-        <div class="sample-tag">סרטון #2</div>
       </div>
 
+      <div class="sample-card" onclick="openVideo('video3.mp4')">
+        <div class="thumb-wrap">
+          <img src="thumb3.jpg" alt="דוגמה 3" class="thumb-img">
+          <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── LIGHTBOX ── -->
+  <div id="lightbox" onclick="closeVideo()">
+    <div id="lightbox-inner" onclick="event.stopPropagation()">
+      <button id="lightbox-close" onclick="closeVideo()">✕</button>
+      <video id="lightbox-video" controls playsinline></video>
     </div>
   </div>
 
@@ -537,7 +579,7 @@
       ₪99 <span>לסרטון אחד · עד 10 שניות</span>
     </div>
 
-    <form action="https://formspree.io/f/otyot.one@gmail.com" method="POST" enctype="multipart/form-data">
+    <form action="https://formspree.io/f/mnjroazl" method="POST" enctype="multipart/form-data">
       <input type="hidden" name="_subject" value="הזמנה חדשה - רגעים חיים">
       <input type="hidden" name="_language" value="he">
 
@@ -582,6 +624,28 @@
   </footer>
 
   <script>
+    // Lightbox
+    function openVideo(src) {
+      const lb = document.getElementById('lightbox');
+      const vid = document.getElementById('lightbox-video');
+      vid.src = src;
+      lb.classList.add('active');
+      vid.play();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideo() {
+      const lb = document.getElementById('lightbox');
+      const vid = document.getElementById('lightbox-video');
+      lb.classList.remove('active');
+      vid.pause();
+      vid.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVideo(); });
+
     // Show file name after selection
     document.getElementById('fileInput').addEventListener('change', function() {
       const name = this.files[0]?.name || '';
