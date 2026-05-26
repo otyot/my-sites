@@ -251,19 +251,27 @@
 
     #lightbox-close {
       position: absolute;
-      top: -40px;
-      left: 0;
-      background: none;
-      border: none;
+      top: -52px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(200,146,42,0.15);
+      border: 1px solid var(--amber);
       color: var(--cream);
-      font-size: 1.4rem;
+      font-size: 1rem;
       cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.2s;
+      opacity: 0.9;
+      transition: opacity 0.2s, background 0.2s;
       font-family: 'Heebo', sans-serif;
+      padding: 8px 28px;
+      border-radius: 2px;
+      letter-spacing: 2px;
+      white-space: nowrap;
     }
 
-    #lightbox-close:hover { opacity: 1; }
+    #lightbox-close:hover {
+      opacity: 1;
+      background: rgba(200,146,42,0.3);
+    }
 
     /* ── HOW IT WORKS ── */
     .how-section {
@@ -489,7 +497,7 @@
       .steps-grid   { grid-template-columns: 1fr; gap: 36px; }
     }
 
-    @media (max-width: 900px) {
+    @media (min-width: 701px) and (max-width: 900px) {
       .samples-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
@@ -540,8 +548,8 @@
   <!-- ── LIGHTBOX ── -->
   <div id="lightbox" onclick="closeVideo()">
     <div id="lightbox-inner" onclick="event.stopPropagation()">
-      <button id="lightbox-close" onclick="closeVideo()">✕</button>
-      <video id="lightbox-video" controls playsinline></video>
+      <button id="lightbox-close" onclick="closeVideo()">✕ סגור</button>
+      <video id="lightbox-video" playsinline></video>
     </div>
   </div>
 
@@ -579,9 +587,10 @@
       ₪99 <span>לסרטון אחד · עד 10 שניות</span>
     </div>
 
-    <form action="https://formspree.io/f/mnjroazl" method="POST" enctype="multipart/form-data">
-      <input type="hidden" name="_subject" value="הזמנה חדשה - רגעים חיים">
-      <input type="hidden" name="_language" value="he">
+    <form action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="access_key" value="be13056e-061a-4d23-b9b2-b2b5bf5ed7da">
+      <input type="hidden" name="subject" value="הזמנה חדשה - רגעים חיים">
+      <input type="hidden" name="from_name" value="רגעים חיים">
 
       <div class="form-group">
         <label for="name">שם מלא <span style="color:var(--amber)">*</span></label>
