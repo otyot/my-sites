@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>ORNY Tips Carousel</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -10,39 +10,34 @@
   <main class="page">
     <section class="phone-frame" aria-label="קרוסלת טיפים">
       <div class="carousel" id="carousel">
-        <article class="slide cover-slide">
-          <h1>ORNY</h1>
-        </article>
+        <div class="track" id="track">
+          <article class="slide cover-slide" aria-label="עמוד פתיחה">
+            <div class="cover-title">ORNY</div>
+          </article>
 
-        <article class="slide image-slide">
-          <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612374/tip-001/slide-01.png" alt="Tip slide 1" />
-        </article>
+          <article class="slide">
+            <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612374/tip-001/slide-01.png" alt="טיפ 1 - שקופית 1" />
+          </article>
 
-        <article class="slide image-slide">
-          <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612375/tip-001/slide-02.png" alt="Tip slide 2" />
-        </article>
+          <article class="slide">
+            <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612375/tip-001/slide-02.png" alt="טיפ 1 - שקופית 2" />
+          </article>
 
-        <article class="slide image-slide">
-          <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-03.png" alt="Tip slide 3" />
-        </article>
+          <article class="slide">
+            <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-03.png" alt="טיפ 1 - שקופית 3" />
+          </article>
 
-        <article class="slide image-slide">
-          <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-04.png" alt="Tip slide 4" />
-        </article>
+          <article class="slide">
+            <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-04.png" alt="טיפ 1 - שקופית 4" />
+          </article>
 
-        <article class="slide image-slide">
-          <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-05.png" alt="Tip slide 5" />
-        </article>
+          <article class="slide">
+            <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-05.png" alt="טיפ 1 - שקופית 5" />
+          </article>
+        </div>
       </div>
 
-      <nav class="dots" aria-label="ניווט שקופיות">
-        <button class="dot active" aria-label="שקופית 1"></button>
-        <button class="dot" aria-label="שקופית 2"></button>
-        <button class="dot" aria-label="שקופית 3"></button>
-        <button class="dot" aria-label="שקופית 4"></button>
-        <button class="dot" aria-label="שקופית 5"></button>
-        <button class="dot" aria-label="שקופית 6"></button>
-      </nav>
+      <nav class="dots" id="dots" aria-label="ניווט שקופיות"></nav>
     </section>
   </main>
 
