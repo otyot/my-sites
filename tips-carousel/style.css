@@ -5,108 +5,134 @@
 html,
 body {
   margin: 0;
+  width: 100%;
   min-height: 100%;
   background: #ffffff;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overscroll-behavior: none;
 }
 
 body {
   overflow: hidden;
 }
 
-.page {
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px 12px;
+.app {
+  width: 100vw;
+  height: 100dvh;
   background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
 }
 
-.phone-frame {
-  width: min(100%, 430px);
-  height: min(calc(100svh - 36px), 764px);
+.carousel-shell {
+  width: min(calc(100vw - 24px), calc((100dvh - 56px) * 9 / 16));
+  height: min(calc(100dvh - 24px), calc((100vw - 24px) * 16 / 9));
+  max-width: 430px;
   aspect-ratio: 9 / 16;
-  position: relative;
-  overflow: hidden;
-  background: #ffffff;
-  border-radius: 24px;
+  display: grid;
+  grid-template-rows: 1fr 26px;
+  gap: 8px;
 }
 
 .carousel {
   width: 100%;
-  height: calc(100% - 42px);
-  display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  direction: ltr;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
+  touch-action: pan-y;
 }
 
-.carousel::-webkit-scrollbar {
-  display: none;
+.track {
+  height: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  transform: translate3d(0, 0, 0);
+  transition: transform 360ms cubic-bezier(0.22, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.track.dragging {
+  transition: none;
 }
 
 .slide {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  scroll-snap-align: start;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   background: #ffffff;
+  overflow: hidden;
 }
 
-.cover-slide h1 {
-  margin: 0;
-  color: #222222;
-  font-size: clamp(48px, 15vw, 86px);
-  letter-spacing: 0.16em;
-  font-weight: 700;
-}
-
-.image-slide img {
+.slide img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  transform: scale(1);
+  transition: transform 520ms ease;
+}
+
+.slide.active img {
+  transform: scale(1.012);
+}
+
+.cover-slide {
+  background: #ffffff;
+}
+
+.cover-content {
+  text-align: center;
+  direction: ltr;
+}
+
+.cover-title {
+  color: #111111;
+  font-size: clamp(48px, 16vw, 92px);
+  line-height: 1;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.version-label {
+  margin-top: 14px;
+  color: #666666;
+  font-size: clamp(16px, 4.6vw, 24px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .dots {
-  height: 42px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: #ffffff;
+  align-items: center;
+  gap: 9px;
+  direction: ltr;
 }
 
 .dot {
   width: 8px;
   height: 8px;
   border: 0;
-  border-radius: 999px;
   padding: 0;
-  background: #cfcfcf;
+  border-radius: 999px;
+  background: #d1d1d1;
   cursor: pointer;
-  transition: width 180ms ease, background 180ms ease;
 }
 
 .dot.active {
-  width: 22px;
-  background: #333333;
+  background: #202020;
 }
 
-@media (min-width: 700px) {
-  .page {
-    padding: 28px;
-  }
-
-  .phone-frame {
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+@media (min-width: 768px) {
+  .carousel-shell {
+    width: min(430px, calc((100dvh - 56px) * 9 / 16));
+    height: min(calc(100dvh - 24px), 764px);
   }
 }
