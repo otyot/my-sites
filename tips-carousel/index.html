@@ -2,18 +2,18 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ORNY</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="app">
-    <section class="carousel-shell">
-      <div class="carousel" id="carousel">
-        <article class="slide cover-slide">
-          <div class="cover-content">
-            <div class="cover-title">ORNY</div>
-            <div class="version-label">ChatGPT v6</div>
+    <section class="shell">
+      <div class="stage" id="stage">
+        <article class="slide active">
+          <div class="cover">
+            <div class="title">ORNY</div>
+            <div class="version">ChatGPT v7</div>
           </div>
         </article>
 
@@ -24,7 +24,11 @@
         <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-05.png"></article>
       </div>
 
-      <div class="dots" id="dots"></div>
+      <div class="controls">
+        <button id="prev">‹</button>
+        <div id="dots"></div>
+        <button id="next">›</button>
+      </div>
     </section>
   </main>
 
