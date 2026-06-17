@@ -1,37 +1,89 @@
 <!doctype html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ORNY</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ORNY8</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#fff;overflow:hidden;font-family:system-ui}
+.app{width:100vw;height:100dvh;display:grid;place-items:center;padding:12px;background:#fff}
+.shell{width:min(calc(100vw - 24px),430px);aspect-ratio:9/16;display:grid;grid-template-rows:1fr 34px;gap:8px}
+.stage{position:relative;width:100%;height:100%;background:#fff;overflow:hidden}
+.slide{position:absolute;inset:0;display:none;place-items:center;background:#fff}
+.slide.active{display:grid}
+.slide img{width:100%;height:100%;object-fit:contain;display:block}
+.cover{text-align:center;direction:ltr}
+.title{font-size:clamp(48px,16vw,92px);font-weight:850;letter-spacing:.08em;color:#111}
+.version{margin-top:14px;font-size:clamp(16px,4.5vw,24px);color:#666}
+.controls{display:grid;grid-template-columns:40px 1fr 40px;align-items:center}
+button{border:0;background:white;font-size:30px;color:#222}
+.dots{display:flex;justify-content:center;align-items:center;gap:9px}
+.dot{width:8px;height:8px;border-radius:999px;background:#d1d1d1}
+.dot.active{background:#202020}
+</style>
 </head>
+
 <body>
-  <main class="app">
-    <section class="shell">
-      <div class="stage" id="stage">
-        <article class="slide active">
-          <div class="cover">
-            <div class="title">ORNY</div>
-            <div class="version">ChatGPT v7</div>
-          </div>
-        </article>
+<main class="app">
+<section class="shell">
 
-        <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612374/tip-001/slide-01.png"></article>
-        <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612375/tip-001/slide-02.png"></article>
-        <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-03.png"></article>
-        <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-04.png"></article>
-        <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-05.png"></article>
-      </div>
+<div class="stage" id="stage">
+  <article class="slide active">
+    <div class="cover">
+      <div class="title">ORNY</div>
+      <div class="version">ChatGPT v8</div>
+    </div>
+  </article>
 
-      <div class="controls">
-        <button id="prev">‹</button>
-        <div id="dots"></div>
-        <button id="next">›</button>
-      </div>
-    </section>
-  </main>
+  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612374/tip-001/slide-01.png"></article>
+  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612375/tip-001/slide-02.png"></article>
+  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-03.png"></article>
+  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-04.png"></article>
+  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-05.png"></article>
+</div>
 
-  <script src="script.js"></script>
+<div class="controls">
+  <button id="prev">‹</button>
+  <div class="dots" id="dots"></div>
+  <button id="next">›</button>
+</div>
+
+</section>
+</main>
+
+<script>
+const slides=[...document.querySelectorAll(".slide")];
+const dotsWrap=document.getElementById("dots");
+const prev=document.getElementById("prev");
+const next=document.getElementById("next");
+const stage=document.getElementById("stage");
+let current=0;
+
+const dots=slides.map((_,i)=>{
+  const d=document.createElement("div");
+  d.className="dot";
+  d.onclick=()=>show(i);
+  dotsWrap.appendChild(d);
+  return d;
+});
+
+function show(i){
+  current=Math.max(0,Math.min(i,slides.length-1));
+  slides.forEach((s,n)=>s.classList.toggle("active",n===current));
+  dots.forEach((d,n)=>d.classList.toggle("active",n===current));
+}
+
+next.onclick=()=>show(current+1);
+prev.onclick=()=>show(current-1);
+
+stage.onclick=(e)=>{
+  if(e.clientX>window.innerWidth/2) show(current+1);
+  else show(current-1);
+};
+
+show(0);
+</script>
 </body>
 </html>
