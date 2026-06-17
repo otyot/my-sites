@@ -6,9 +6,9 @@
 <title>ORNY</title>
 
 <style>
-
 *{
 box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
 html,body{
@@ -88,9 +88,20 @@ top:0;
 width:38%;
 height:100%;
 z-index:10;
-border:none;
+border:0;
+outline:none;
 background:transparent;
+appearance:none;
+-webkit-appearance:none;
 cursor:pointer;
+padding:0;
+margin:0;
+}
+
+.tap:focus,
+.tap:active{
+outline:none;
+background:transparent;
 }
 
 .tap span{
@@ -101,6 +112,7 @@ font-size:54px;
 font-weight:300;
 color:rgba(0,0,0,.22);
 user-select:none;
+pointer-events:none;
 }
 
 .tap.left{
@@ -137,7 +149,6 @@ transition:.25s;
 .dot.active{
 background:#202020;
 }
-
 </style>
 </head>
 
@@ -151,8 +162,8 @@ background:#202020;
 
 <article class="slide active">
 <div class="cover">
-<div class="title">Orny</div>
-<div class="version">ChatGPT v11</div>
+<div class="title">ORNY</div>
+<div class="version">ChatGPT v12</div>
 </div>
 </article>
 
@@ -176,12 +187,12 @@ background:#202020;
 <img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-05.png">
 </article>
 
-<button class="tap left" id="prev">
-<span>←</span>
+<button class="tap left" id="prev" aria-label="Previous slide">
+<span>‹</span>
 </button>
 
-<button class="tap right" id="next">
-<span>→</span>
+<button class="tap right" id="next" aria-label="Next slide">
+<span>›</span>
 </button>
 
 </div>
@@ -193,7 +204,6 @@ background:#202020;
 </main>
 
 <script>
-
 const slides=[...document.querySelectorAll(".slide")];
 const dotsBox=document.getElementById("dots");
 
@@ -229,7 +239,6 @@ show(current-1);
 };
 
 show(0);
-
 </script>
 
 </body>
