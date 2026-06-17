@@ -3,73 +3,234 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ORNY10</title>
+<title>ORNY</title>
+
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:#fff;overflow:hidden;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{width:100vw;height:100dvh;display:grid;place-items:center;padding:12px;background:#fff}
-.shell{width:min(calc(100vw - 24px),430px);aspect-ratio:9/16;display:grid;grid-template-rows:1fr 26px;gap:8px}
-.stage{position:relative;width:100%;height:100%;background:#fff;overflow:hidden}
-.slide{position:absolute;inset:0;display:none;place-items:center;background:#fff}
-.slide.active{display:grid}
-.slide img{width:100%;height:100%;object-fit:contain;display:block}
-.cover{text-align:center;direction:ltr}
-.title{font-size:clamp(48px,16vw,92px);font-weight:850;letter-spacing:.08em;color:#111}
-.version{margin-top:14px;font-size:clamp(16px,4.5vw,24px);color:#666}
-.tap{position:absolute;top:0;width:38%;height:100%;z-index:5;border:0;background:transparent;color:rgba(0,0,0,.22);font-size:46px}
-.tap.left{left:0}
-.tap.right{right:0}
-.tap span{position:absolute;top:50%;transform:translateY(-50%)}
-.tap.left span{left:12px}
-.tap.right span{right:12px}
-.dots{display:flex;justify-content:center;align-items:center;gap:9px}
-.dot{width:8px;height:8px;border-radius:999px;background:#d1d1d1}
-.dot.active{background:#202020}
+
+*{
+box-sizing:border-box;
+}
+
+html,body{
+margin:0;
+width:100%;
+height:100%;
+background:#ffffff;
+overflow:hidden;
+font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.app{
+width:100vw;
+height:100dvh;
+display:grid;
+place-items:center;
+padding:12px;
+background:#ffffff;
+}
+
+.shell{
+width:min(calc(100vw - 24px),430px);
+aspect-ratio:9/16;
+display:grid;
+grid-template-rows:1fr 26px;
+gap:8px;
+}
+
+.stage{
+position:relative;
+width:100%;
+height:100%;
+overflow:hidden;
+background:#ffffff;
+}
+
+.slide{
+position:absolute;
+inset:0;
+display:none;
+place-items:center;
+background:#ffffff;
+}
+
+.slide.active{
+display:grid;
+}
+
+.slide img{
+width:100%;
+height:100%;
+object-fit:contain;
+display:block;
+}
+
+.cover{
+text-align:center;
+direction:ltr;
+}
+
+.title{
+font-size:clamp(48px,16vw,92px);
+font-weight:850;
+letter-spacing:.08em;
+color:#111;
+}
+
+.version{
+margin-top:14px;
+font-size:clamp(16px,4.5vw,24px);
+color:#666;
+}
+
+.tap{
+position:absolute;
+top:0;
+width:38%;
+height:100%;
+z-index:10;
+border:none;
+background:transparent;
+cursor:pointer;
+}
+
+.tap span{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+font-size:54px;
+font-weight:300;
+color:rgba(0,0,0,.22);
+user-select:none;
+}
+
+.tap.left{
+left:0;
+}
+
+.tap.left span{
+left:12px;
+}
+
+.tap.right{
+right:0;
+}
+
+.tap.right span{
+right:12px;
+}
+
+.dots{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:9px;
+}
+
+.dot{
+width:8px;
+height:8px;
+border-radius:999px;
+background:#d1d1d1;
+transition:.25s;
+}
+
+.dot.active{
+background:#202020;
+}
+
 </style>
 </head>
+
 <body>
+
 <main class="app">
+
 <section class="shell">
 
 <div class="stage">
-  <article class="slide active"><div class="cover"><div class="title">ORNY</div><div class="version">ChatGPT v10</div></div></article>
-  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612374/tip-001/slide-01.png"></article>
-  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612375/tip-001/slide-02.png"></article>
-  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-03.png"></article>
-  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-04.png"></article>
-  <article class="slide"><img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-05.png"></article>
 
-  <button class="tap left" id="next"><span>‹</span></button>
-  <button class="tap right" id="prev"><span>›</span></button>
+<article class="slide active">
+<div class="cover">
+<div class="title">Orny</div>
+<div class="version">ChatGPT v11</div>
+</div>
+</article>
+
+<article class="slide">
+<img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612374/tip-001/slide-01.png">
+</article>
+
+<article class="slide">
+<img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612375/tip-001/slide-02.png">
+</article>
+
+<article class="slide">
+<img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-03.png">
+</article>
+
+<article class="slide">
+<img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-04.png">
+</article>
+
+<article class="slide">
+<img src="https://res.cloudinary.com/dvj8hnuao/image/upload/v1781612377/tip-001/slide-05.png">
+</article>
+
+<button class="tap left" id="prev">
+<span>←</span>
+</button>
+
+<button class="tap right" id="next">
+<span>→</span>
+</button>
+
 </div>
 
 <div class="dots" id="dots"></div>
 
 </section>
+
 </main>
 
 <script>
+
 const slides=[...document.querySelectorAll(".slide")];
 const dotsBox=document.getElementById("dots");
+
 let current=0;
 
 const dots=slides.map(()=>{
-  const d=document.createElement("div");
-  d.className="dot";
-  dotsBox.appendChild(d);
-  return d;
+const d=document.createElement("div");
+d.className="dot";
+dotsBox.appendChild(d);
+return d;
 });
 
 function show(i){
-  current=Math.max(0,Math.min(i,slides.length-1));
-  slides.forEach((s,n)=>s.classList.toggle("active",n===current));
-  dots.forEach((d,n)=>d.classList.toggle("active",n===current));
+
+current=Math.max(0,Math.min(i,slides.length-1));
+
+slides.forEach((s,n)=>{
+s.classList.toggle("active",n===current);
+});
+
+dots.forEach((d,n)=>{
+d.classList.toggle("active",n===current);
+});
+
 }
 
-document.getElementById("next").onclick=()=>show(current+1);
-document.getElementById("prev").onclick=()=>show(current-1);
+document.getElementById("next").onclick=()=>{
+show(current+1);
+};
+
+document.getElementById("prev").onclick=()=>{
+show(current-1);
+};
 
 show(0);
+
 </script>
+
 </body>
 </html>
