@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Fala — PT ⇄ EN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#10181a;
+    --panel:#182426;
+    --panel-edge:#233234;
+    --mist:#7e969a;
+    --paper:#eef4f3;
+    --teal:#4fb6ac;
+    --teal-bright:#6fd6cb;
+    --amber:#d9a441;
+    --danger:#d9704f;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; height:100%;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter',system-ui,sans-serif;
+    overflow:hidden;
+    overscroll-behavior:none;
+  }
+  #app{
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 20px 6px;
+  }
+  .brand{display:flex; flex-direction:column;}
+  .brand .name{
+    font-family:'Fraunces', serif; font-weight:600; font-size:22px; letter-spacing:0.3px;
+    color:var(--paper);
+  }
+  .brand .pair{
+    font-size:12px; color:var(--mist); letter-spacing:1.5px; text-transform:uppercase; margin-top:2px;
+  }
+  #settingsBtn{
+    background:none; border:none; color:var(--mist); padding:8px; cursor:pointer;
+  }
+  #settingsBtn svg{width:22px; height:22px;}
+
+  /* Transcript feed */
+  #feed{
+    flex:1;
+    overflow-y:auto;
+    padding:8px 20px 12px;
+    display:flex; flex-direction:column; gap:14px;
+    -webkit-overflow-scrolling:touch;
+  }
+  #feed:empty::before{
+    content:"Hold the button and speak — Portuguese or English, either way.";
+    color:var(--mist);
+    font-size:15px;
+    line-height:1.5;
+    display:block;
+    margin-top:40px;
+    text-align:center;
+    padding:0 30px;
+  }
+  .exchange{
+    background:var(--panel);
+    border:1px solid var(--panel-edge);
+    border-radius:14px;
+    padding:14px 16px;
+    animation:rise 0.25s ease;
+  }
+  @keyframes rise{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+  .exchange .heard{
+    font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--mist); margin-bottom:6px;
+  }
+  .exchange .heard .lang-tag{ color:var(--teal-bright); font-weight:600; }
+  .exchange .src-text{ font-size:15px; color:var(--paper); opacity:0.65; margin-bottom:10px; line-height:1.4;}
+  .exchange .tgt-row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
+  .exchange .tgt-text{ font-family:'Fraunces', serif; font-size:19px; line-height:1.4; color:var(--paper);}
+  .exchange .replay{
+    flex:0 0 auto; background:none; border:none; color:var(--teal-bright); cursor:pointer; padding:4px;
+  }
+  .exchange .replay svg{width:18px; height:18px;}
+  .exchange.error{border-color:var(--danger);}
+  .exchange.error .tgt-text{color:var(--danger); font-family:'Inter',sans-serif; font-size:14px;}
+
+  /* Mic button */
+  #stage{
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    padding:10px 20px calc(28px + env(safe-area-inset-bottom));
+    gap:14px;
+  }
+  #status{
+    font-size:13px; color:var(--mist); height:16px; letter-spacing:0.3px;
+  }
+  #status.live{ color:var(--teal-bright); }
+  #micBtn{
+    width:96px; height:96px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--teal-bright), var(--teal) 65%);
+    border:none;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 0 0 rgba(79,182,172,0.5);
+    transition:transform 0.12s ease, box-shadow 0.2s ease;
+    touch-action:none;
+    cursor:pointer;
+  }
+  #micBtn svg{width:36px; height:36px; fill:var(--ink);}
+  #micBtn.recording{
+    background:radial-gradient(circle at 35% 30%, #f0a7a7, var(--danger) 65%);
+    animation:pulse 1.1s infinite;
+    transform:scale(1.05);
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(217,112,79,0.45);}
+    70%{box-shadow:0 0 0 22px rgba(217,112,79,0);}
+    100%{box-shadow:0 0 0 0 rgba(217,112,79,0);}
+  }
+
+  /* Settings overlay */
+  #overlay{
+    position:fixed; inset:0; background:rgba(10,16,17,0.92);
+    display:none; align-items:center; justify-content:center; z-index:10;
+    padding:24px;
+  }
+  #overlay.show{display:flex;}
+  .sheet{
+    background:var(--panel); border:1px solid var(--panel-edge); border-radius:16px;
+    padding:22px; width:100%; max-width:360px;
+  }
+  .sheet h2{font-family:'Fraunces',serif; font-weight:600; font-size:19px; margin:0 0 14px;}
+  .sheet label{font-size:12px; color:var(--mist); letter-spacing:0.5px; text-transform:uppercase;}
+  .sheet input{
+    width:100%; margin-top:8px; padding:12px 14px; border-radius:10px;
+    border:1px solid var(--panel-edge); background:var(--ink); color:var(--paper);
+    font-size:14px; font-family:'Inter',monospace;
+  }
+  .sheet .row{display:flex; gap:10px; margin-top:18px;}
+  .sheet button{
+    flex:1; padding:12px; border-radius:10px; border:none; font-size:14px; font-weight:600; cursor:pointer;
+  }
+  .sheet .save{background:var(--teal-bright); color:var(--ink);}
+  .sheet .close{background:transparent; color:var(--mist); border:1px solid var(--panel-edge);}
+  .sheet .note{font-size:12px; color:var(--mist); margin-top:14px; line-height:1.5;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand">
+      <div class="name">Fala</div>
+      <div class="pair">Português ⇄ English</div>
+    </div>
+    <button id="settingsBtn" aria-label="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.5a7.9 7.9 0 0 0 0-3l2-1.5-2-3.4-2.4.6a7.9 7.9 0 0 0-2.6-1.5L14 2h-4l-.4 2.7a7.9 7.9 0 0 0-2.6 1.5l-2.4-.6-2 3.4 2 1.5a7.9 7.9 0 0 0 0 3l-2 1.5 2 3.4 2.4-.6a7.9 7.9 0 0 0 2.6 1.5L10 22h4l.4-2.7a7.9 7.9 0 0 0 2.6-1.5l2.4.6 2-3.4-2-1.5Z"/></svg>
+    </button>
+  </header>
+
+  <div id="feed"></div>
+
+  <div id="stage">
+    <div id="status">Hold to talk</div>
+    <button id="micBtn" aria-label="Hold to talk">
+      <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-2.08A7 7 0 0 0 19 11Z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div id="overlay">
+  <div class="sheet">
+    <h2>OpenAI API key</h2>
+    <label for="keyInput">Key</label>
+    <input id="keyInput" type="password" placeholder="sk-..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <div class="row">
+      <button class="close" id="closeBtn">Cancel</button>
+      <button class="save" id="saveBtn">Save</button>
+    </div>
+    <div class="note">Stored only in this browser, on this device. Never leaves your phone except to call OpenAI directly.</div>
+  </div>
+</div>
+
+<script>
+const feed = document.getElementById('feed');
+const micBtn = document.getElementById('micBtn');
+const status = document.getElementById('status');
+const overlay = document.getElementById('overlay');
+const keyInput = document.getElementById('keyInput');
+
+const KEY_STORAGE = 'fala_openai_key';
+let apiKey = localStorage.getItem(KEY_STORAGE) || '';
+
+function openSettings(){
+  keyInput.value = apiKey;
+  overlay.classList.add('show');
+}
+function closeSettings(){ overlay.classList.remove('show'); }
+
+document.getElementById('settingsBtn').addEventListener('click', openSettings);
+document.getElementById('closeBtn').addEventListener('click', closeSettings);
+document.getElementById('saveBtn').addEventListener('click', () => {
+  apiKey = keyInput.value.trim();
+  localStorage.setItem(KEY_STORAGE, apiKey);
+  closeSettings();
+});
+
+if(!apiKey){ setTimeout(openSettings, 300); }
+
+// ---- Recording ----
+let mediaRecorder, chunks = [], stream;
+
+function pickMimeType(){
+  const candidates = ['audio/mp4', 'audio/webm', 'audio/webm;codecs=opus'];
+  for(const c of candidates){
+    if(window.MediaRecorder && MediaRecorder.isTypeSupported(c)) return c;
+  }
+  return '';
+}
+
+async function startRecording(){
+  try{
+    if(!stream){
+      stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    }
+    chunks = [];
+    const mimeType = pickMimeType();
+    mediaRecorder = new MediaRecorder(stream, mimeType ? {mimeType} : undefined);
+    mediaRecorder.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
+    mediaRecorder.onstop = handleStop;
+    mediaRecorder.start();
+    micBtn.classList.add('recording');
+    status.textContent = 'Listening…';
+    status.classList.add('live');
+  }catch(err){
+    addExchange({error:true, text:'Could not access the microphone. Check permissions in Settings.'});
+  }
+}
+
+function stopRecording(){
+  if(mediaRecorder && mediaRecorder.state !== 'inactive'){
+    mediaRecorder.stop();
+  }
+  micBtn.classList.remove('recording');
+  status.textContent = 'Working…';
+}
+
+micBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); startRecording(); });
+micBtn.addEventListener('pointerup', stopRecording);
+micBtn.addEventListener('pointerleave', () => { if(mediaRecorder && mediaRecorder.state === 'recording') stopRecording(); });
+micBtn.addEventListener('pointercancel', () => { if(mediaRecorder && mediaRecorder.state === 'recording') stopRecording(); });
+
+async function handleStop(){
+  if(!apiKey){
+    addExchange({error:true, text:'Add your OpenAI API key in Settings first.'});
+    resetStatus();
+    openSettings();
+    return;
+  }
+  const mimeType = mediaRecorder.mimeType || 'audio/webm';
+  const blob = new Blob(chunks, {type: mimeType});
+  if(blob.size < 1000){
+    resetStatus();
+    return; // too short, likely an accidental tap
+  }
+  try{
+    const {text, language} = await transcribe(blob, mimeType);
+    if(!text || !text.trim()){ resetStatus(); return; }
+    const sourceLang = normalizeLang(language);
+    const targetLang = sourceLang === 'pt' ? 'en' : 'pt';
+    status.textContent = 'Translating…';
+    const translation = await translate(text, targetLang);
+    addExchange({sourceLang, targetLang, sourceText:text, targetText:translation});
+    speak(translation, targetLang);
+  }catch(err){
+    addExchange({error:true, text: describeError(err)});
+  }
+  resetStatus();
+}
+
+function resetStatus(){
+  status.textContent = 'Hold to talk';
+  status.classList.remove('live');
+}
+
+function describeError(err){
+  const msg = (err && err.message) || '';
+  if(msg.includes('401')) return 'That API key was rejected. Check it in Settings.';
+  if(msg.includes('429')) return 'Rate limited or out of quota on this key.';
+  return 'Something went wrong: ' + (msg || 'unknown error');
+}
+
+function normalizeLang(l){
+  if(!l) return 'en';
+  const s = l.toLowerCase();
+  if(s.startsWith('pt')) return 'pt';
+  return 'en';
+}
+
+async function transcribe(blob, mimeType){
+  const ext = mimeType.includes('mp4') ? 'm4a' : 'webm';
+  const form = new FormData();
+  form.append('file', blob, 'audio.' + ext);
+  form.append('model', 'whisper-1');
+  form.append('response_format', 'verbose_json');
+
+  const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+    method:'POST',
+    headers:{ 'Authorization': 'Bearer ' + apiKey },
+    body: form
+  });
+  if(!res.ok){ const t = await res.text(); throw new Error(res.status + ': ' + t); }
+  const data = await res.json();
+  return {text: data.text, language: data.language};
+}
+
+async function translate(text, targetLang){
+  const targetName = targetLang === 'pt' ? 'European Portuguese' : 'English';
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method:'POST',
+    headers:{
+      'Authorization':'Bearer ' + apiKey,
+      'Content-Type':'application/json'
+    },
+    body: JSON.stringify({
+      model:'gpt-4o-mini',
+      messages:[
+        {role:'system', content:`Translate the user's message into ${targetName}. Reply with only the translation, nothing else. Preserve tone and register.`},
+        {role:'user', content:text}
+      ],
+      temperature:0.2
+    })
+  });
+  if(!res.ok){ const t = await res.text(); throw new Error(res.status + ': ' + t); }
+  const data = await res.json();
+  return data.choices[0].message.content.trim();
+}
+
+// ---- Speech output ----
+let voices = [];
+function loadVoices(){ voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+if(window.speechSynthesis){
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function pickVoice(langCode){
+  const prefix = langCode === 'pt' ? 'pt' : 'en';
+  return voices.find(v => v.lang.toLowerCase().startsWith(prefix)) || null;
+}
+
+function speak(text, langCode){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = langCode === 'pt' ? 'pt-PT' : 'en-US';
+  const v = pickVoice(langCode);
+  if(v) utter.voice = v;
+  utter.rate = 1.0;
+  speechSynthesis.speak(utter);
+}
+
+// ---- Feed rendering ----
+function langLabel(code){ return code === 'pt' ? 'Portuguese' : 'English'; }
+
+function addExchange({error, sourceLang, targetLang, sourceText, targetText, text}){
+  const el = document.createElement('div');
+  el.className = 'exchange' + (error ? ' error' : '');
+  if(error){
+    el.innerHTML = `<div class="tgt-text">${escapeHtml(text)}</div>`;
+  }else{
+    el.innerHTML = `
+      <div class="heard">Heard <span class="lang-tag">${langLabel(sourceLang)}</span> → speaking <span class="lang-tag">${langLabel(targetLang)}</span></div>
+      <div class="src-text">${escapeHtml(sourceText)}</div>
+      <div class="tgt-row">
+        <div class="tgt-text">${escapeHtml(targetText)}</div>
+        <button class="replay" aria-label="Replay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12a7 7 0 1 1 2.2 5.1"/><path d="M5 12V7"/><path d="M5 12h5"/></svg>
+        </button>
+      </div>`;
+    el.querySelector('.replay').addEventListener('click', () => speak(targetText, targetLang));
+  }
+  feed.appendChild(el);
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>
