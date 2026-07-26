@@ -265,9 +265,19 @@ function stopRecording(){
   status.textContent = 'Working…';
 }
 
+let ttsUnlocked = false;
+function unlockSpeech(){
+  if(ttsUnlocked || !window.speechSynthesis) return;
+  const primer = new SpeechSynthesisUtterance(' ');
+  primer.volume = 0;
+  speechSynthesis.speak(primer);
+  ttsUnlocked = true;
+}
+
 let isRecording = false;
 micBtn.addEventListener('click', (e) => {
   e.preventDefault();
+  unlockSpeech();
   if(!isRecording){
     isRecording = true;
     recordStartedAt = Date.now();
