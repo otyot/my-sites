@@ -303,13 +303,12 @@ async function handleStop(){
     return; // too short, likely an accidental tap
   }
   try{
-    const {text, language} = await transcribe(blob, mimeType);
+    const {text} = await transcribe(blob, mimeType);
     if(!text || !text.trim()){ resetStatus(); return; }
-    const sourceLang = normalizeLang(language);
-    const targetLang = sourceLang === 'pt' ? 'en' : 'pt';
     status.textContent = 'Translating…';
-    const translation = await translate(text, targetLang);
-    addExchange({sourceLang, targetLang, sourceText:text, targetText:translation});
+    const {detectedLang, translation} = await detectAndTranslate(text);
+    const targetLang = detectedLang === 'pt' ? 'en' : 'pt';
+    addExchange({sourceLang:detectedLang, targetLang, sourceText:text, targetText:translation});
     speak(translation, targetLang);
   }catch(err){
     addExchange({error:true, text: describeError(err)});
@@ -342,7 +341,6 @@ async function transcribe(blob, mimeType){
   const form = new FormData();
   form.append('file', blob, 'audio.' + ext);
   form.append('model', 'whisper-1');
-  form.append('response_format', 'verbose_json');
 
   const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
     method:'POST',
@@ -351,11 +349,10 @@ async function transcribe(blob, mimeType){
   });
   if(!res.ok){ const t = await res.text(); throw new Error(res.status + ': ' + t); }
   const data = await res.json();
-  return {text: data.text, language: data.language};
+  return {text: data.text};
 }
 
-async function translate(text, targetLang){
-  const targetName = targetLang === 'pt' ? 'European Portuguese' : 'English';
+async function detectAndTranslate(text){
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method:'POST',
     headers:{
@@ -364,16 +361,18 @@ async function translate(text, targetLang){
     },
     body: JSON.stringify({
       model:'gpt-4o-mini',
+      response_format:{type:'json_object'},
       messages:[
-        {role:'system', content:`Translate the user's message into ${targetName}. Reply with only the translation, nothing else. Preserve tone and register.`},
+        {role:'system', content:'You are a Portuguese-English interpreter. Given a short piece of transcribed speech, identify whether it is Portuguese or English (even single words or short phrases — use your best judgment on the actual language, not assumptions), then translate it into the other language. If it is Portuguese, translate to natural English. If it is English, translate to natural European Portuguese. Reply ONLY with JSON: {"detected_language": "pt" or "en", "translation": "..."}'},
         {role:'user', content:text}
       ],
-      temperature:0.2
+      temperature:0.1
     })
   });
   if(!res.ok){ const t = await res.text(); throw new Error(res.status + ': ' + t); }
   const data = await res.json();
-  return data.choices[0].message.content.trim();
+  const parsed = JSON.parse(data.choices[0].message.content);
+  return {detectedLang: parsed.detected_language === 'pt' ? 'pt' : 'en', translation: parsed.translation};
 }
 
 // ---- Speech output ----
@@ -385,8 +384,15 @@ if(window.speechSynthesis){
 }
 
 function pickVoice(langCode){
-  const prefix = langCode === 'pt' ? 'pt' : 'en';
-  return voices.find(v => v.lang.toLowerCase().startsWith(prefix)) || null;
+  if(langCode === 'pt'){
+    return voices.find(v => v.lang.toLowerCase() === 'pt-pt')
+        || voices.find(v => v.lang.toLowerCase().startsWith('pt'))
+        || null;
+  }
+  return voices.find(v => v.lang.toLowerCase() === 'en-us' && /samantha|aaron|nicky/i.test(v.name))
+      || voices.find(v => v.lang.toLowerCase() === 'en-us')
+      || voices.find(v => v.lang.toLowerCase().startsWith('en'))
+      || null;
 }
 
 function speak(text, langCode){
