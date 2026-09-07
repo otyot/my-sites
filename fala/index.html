@@ -156,11 +156,14 @@
   <header>
     <div class="brand">
       <div class="name">Fala</div>
-      <div class="pair">Português ⇄ English</div>
+      <div class="pair" id="pairLabel">Português ⇄ English</div>
     </div>
-    <button id="settingsBtn" aria-label="Settings">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.5a7.9 7.9 0 0 0 0-3l2-1.5-2-3.4-2.4.6a7.9 7.9 0 0 0-2.6-1.5L14 2h-4l-.4 2.7a7.9 7.9 0 0 0-2.6 1.5l-2.4-.6-2 3.4 2 1.5a7.9 7.9 0 0 0 0 3l-2 1.5 2 3.4 2.4-.6a7.9 7.9 0 0 0 2.6 1.5L10 22h4l.4-2.7a7.9 7.9 0 0 0 2.6-1.5l2.4.6 2-3.4-2-1.5Z"/></svg>
-    </button>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button id="pairSwitchBtn" style="background:none; border:1px solid var(--panel-edge); color:var(--mist); font-size:11px; letter-spacing:0.5px; padding:7px 11px; border-radius:8px; cursor:pointer;">Switch</button>
+      <button id="settingsBtn" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.5a7.9 7.9 0 0 0 0-3l2-1.5-2-3.4-2.4.6a7.9 7.9 0 0 0-2.6-1.5L14 2h-4l-.4 2.7a7.9 7.9 0 0 0-2.6 1.5l-2.4-.6-2 3.4 2 1.5a7.9 7.9 0 0 0 0 3l-2 1.5 2 3.4 2.4-.6a7.9 7.9 0 0 0 2.6 1.5L10 22h4l.4-2.7a7.9 7.9 0 0 0 2.6-1.5l2.4.6 2-3.4-2-1.5Z"/></svg>
+      </button>
+    </div>
   </header>
 
   <div id="feed"></div>
@@ -195,6 +198,29 @@ const keyInput = document.getElementById('keyInput');
 
 const KEY_STORAGE = 'fala_openai_key';
 let apiKey = localStorage.getItem(KEY_STORAGE) || '';
+
+// ---- Language pairs ----
+const PAIRS = {
+  pt: { code:'pt', name:'Portuguese', display:'Português', voiceLang:'pt-pt', label:'Português ⇄ English' },
+  hu: { code:'hu', name:'Hungarian',  display:'Magyar',    voiceLang:'hu-hu', label:'Magyar ⇄ English' }
+};
+const PAIR_STORAGE = 'fala_pair';
+let currentPair = PAIRS[localStorage.getItem(PAIR_STORAGE)] || PAIRS.pt;
+
+const pairLabel = document.getElementById('pairLabel');
+const pairSwitchBtn = document.getElementById('pairSwitchBtn');
+
+function applyPair(){
+  pairLabel.textContent = currentPair.label;
+  document.title = `Fala — ${currentPair.code.toUpperCase()} ⇄ EN`;
+}
+applyPair();
+
+pairSwitchBtn.addEventListener('click', () => {
+  currentPair = currentPair.code === 'pt' ? PAIRS.hu : PAIRS.pt;
+  localStorage.setItem(PAIR_STORAGE, currentPair.code);
+  applyPair();
+});
 
 function openSettings(){
   keyInput.value = apiKey;
@@ -307,7 +333,7 @@ async function handleStop(){
     if(!text || !text.trim()){ resetStatus(); return; }
     status.textContent = 'Translating…';
     const {detectedLang, translation} = await detectAndTranslate(text);
-    const targetLang = detectedLang === 'pt' ? 'en' : 'pt';
+    const targetLang = detectedLang === currentPair.code ? 'en' : currentPair.code;
     addExchange({sourceLang:detectedLang, targetLang, sourceText:text, targetText:translation});
     speak(translation, targetLang);
   }catch(err){
@@ -329,13 +355,6 @@ function describeError(err){
   return 'Something went wrong: ' + (msg || 'unknown error');
 }
 
-function normalizeLang(l){
-  if(!l) return 'en';
-  const s = l.toLowerCase();
-  if(s.startsWith('pt')) return 'pt';
-  return 'en';
-}
-
 async function transcribe(blob, mimeType){
   const ext = mimeType.includes('mp4') ? 'm4a' : 'webm';
   const form = new FormData();
@@ -353,6 +372,7 @@ async function transcribe(blob, mimeType){
 }
 
 async function detectAndTranslate(text){
+  const foreign = currentPair.name;
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method:'POST',
     headers:{
@@ -363,7 +383,7 @@ async function detectAndTranslate(text){
       model:'gpt-4o-mini',
       response_format:{type:'json_object'},
       messages:[
-        {role:'system', content:'You are a Portuguese-English interpreter. Given a short piece of transcribed speech, identify whether it is Portuguese or English (even single words or short phrases — use your best judgment on the actual language, not assumptions), then translate it into the other language. If it is Portuguese, translate to natural English. If it is English, translate to natural European Portuguese. Reply ONLY with JSON: {"detected_language": "pt" or "en", "translation": "..."}'},
+        {role:'system', content:`You are a ${foreign}-English interpreter. Given a short piece of transcribed speech, identify whether it is ${foreign} or English (even single words or short phrases — use your best judgment on the actual language, not assumptions), then translate it into the other language. If it is ${foreign}, translate to natural English. If it is English, translate to natural ${foreign}. Reply ONLY with JSON: {"detected_language": "${currentPair.code}" or "en", "translation": "..."}`},
         {role:'user', content:text}
       ],
       temperature:0.1
@@ -372,7 +392,7 @@ async function detectAndTranslate(text){
   if(!res.ok){ const t = await res.text(); throw new Error(res.status + ': ' + t); }
   const data = await res.json();
   const parsed = JSON.parse(data.choices[0].message.content);
-  return {detectedLang: parsed.detected_language === 'pt' ? 'pt' : 'en', translation: parsed.translation};
+  return {detectedLang: parsed.detected_language === currentPair.code ? currentPair.code : 'en', translation: parsed.translation};
 }
 
 // ---- Speech output ----
@@ -384,9 +404,10 @@ if(window.speechSynthesis){
 }
 
 function pickVoice(langCode){
-  if(langCode === 'pt'){
-    return voices.find(v => v.lang.toLowerCase() === 'pt-pt')
-        || voices.find(v => v.lang.toLowerCase().startsWith('pt'))
+  if(langCode !== 'en'){
+    const target = currentPair.voiceLang;
+    return voices.find(v => v.lang.toLowerCase() === target)
+        || voices.find(v => v.lang.toLowerCase().startsWith(langCode))
         || null;
   }
   return voices.find(v => v.lang.toLowerCase() === 'en-us' && /samantha|aaron|nicky/i.test(v.name))
@@ -399,7 +420,7 @@ function speak(text, langCode){
   if(!window.speechSynthesis) return;
   speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = langCode === 'pt' ? 'pt-PT' : 'en-US';
+  utter.lang = langCode === 'en' ? 'en-US' : currentPair.voiceLang;
   const v = pickVoice(langCode);
   if(v) utter.voice = v;
   utter.rate = 1.0;
@@ -407,7 +428,7 @@ function speak(text, langCode){
 }
 
 // ---- Feed rendering ----
-function langLabel(code){ return code === 'pt' ? 'Portuguese' : 'English'; }
+function langLabel(code){ return code === 'en' ? 'English' : currentPair.name; }
 
 function addExchange({error, sourceLang, targetLang, sourceText, targetText, text}){
   const el = document.createElement('div');
